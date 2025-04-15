@@ -1,0 +1,172 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id               Int @default(autoincrement()) @id
+  name             String
+  phone            String
+  password         String
+  type             String
+  regionId         Int
+  stir             Int?
+  mfo              Int?
+  hr               Int?
+  bank             String?
+  oked             Int?
+  manzil           String?
+  region           Region     @relation(fields: [regionId], references: [id])
+  sessions         Session[]
+  orders           Order[]
+}
+
+model Region {
+  id               Int        @default(autoincrement()) @id
+  name             String
+  user             User[]
+}
+
+model Session {
+  id               Int         @default(autoincrement()) @id
+  ip               String
+  userId           Int
+  date             DateTime    @default(now())
+  user             User        @relation(fields: [userId], references: [id])
+}
+
+model Level {
+  id               Int         @default(autoincrement()) @id
+  name             String
+  product          Product []
+  
+}
+
+model Comment {
+  id               Int         @default(autoincrement()) @id
+  message          String
+  star             Float 
+}
+
+model Brand {
+  id               Int         @default(autoincrement()) @id
+  name             String
+  tools            Tools[]
+}
+
+model Capacity {
+  id               Int         @default(autoincrement()) @id
+  name             String
+  tools            Tools[]
+}
+
+model Size {
+  id               Int         @default(autoincrement()) @id
+  name             String
+  tools            Tools[]
+}
+
+model Master {
+  id               Int         @default(autoincrement()) @id
+  fullname         String
+  phone            String
+  isActive         String
+  masterSkill      masterSkill[]
+  image            String
+  passportImage    String
+  star             Float
+  about            String
+  type             String
+  productId        Int?
+}
+
+model masterSkill {
+  id               Int         @default(autoincrement()) @id
+  minWorking_h     Int
+  levelId          Int
+  price_h          Float
+  price_d          Float
+  experience       Int
+  master           Master[]
+  product          Product[]
+}
+
+model Tools {
+  id               Int         @default(autoincrement()) @id
+  name             String
+  desc             String
+  price_h          Float
+  price_d          Float
+  quantity         Int
+  code             Int
+  brandId          Int
+  isActive         String 
+  capacityId       Int
+  sizeId           Int
+  image            String
+  productId        Int
+  product          Product        @relation(fields: [productId], references: [id])
+  brand            Brand          @relation(fields: [brandId], references: [id])
+  capacity         Capacity       @relation(fields: [capacityId], references: [id])
+  size             Size           @relation(fields: [sizeId], references: [id])
+}
+
+model Order {
+  id               Int            @default(autoincrement()) @id
+  productId        Int
+  toolId           Int[]          @default([])
+  total            Float
+  location         String
+  address          String
+  date             DateTime       @default(now())
+  pay_type         String
+  withDelivery     Boolean 
+  status           String
+  instruction      String
+  userId           Int
+  masters          Int[]           @default([])
+  user             User            @relation(fields: [userId], references: [id])         
+}
+
+model Product {
+  id               Int             @default(autoincrement()) @id
+  isActive         String                              
+  minWorking_h     Int
+  tools            Tools[]
+  level            Level[] 
+  masterSkill      masterSkill[]
+}
+
+model FAQ {
+  id               Int             @default(autoincrement()) @id
+  answer           String
+  quiteions        String
+}
+
+model Contact {
+  id               Int             @default(autoincrement()) @id
+  name             String
+  surname          String
+  phone            String
+  address          String
+  message          String
+}
+
+model generalInfo {
+  id               Int             @default(autoincrement()) @id
+  link             String
+  email            String
+  phone            String
+}
