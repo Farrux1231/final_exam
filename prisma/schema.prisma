@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -16,11 +15,12 @@ datasource db {
 
 
 model User {
-  id               Int @default(autoincrement()) @id
+  id               Int       @default(autoincrement()) @id
   name             String
   phone            String
   password         String
-  type             String
+  status           String     @default("pending")
+  role             String
   regionId         Int
   stir             Int?
   mfo              Int?
@@ -35,7 +35,7 @@ model User {
 
 model Region {
   id               Int        @default(autoincrement()) @id
-  name             String
+  name             String     @unique
   user             User[]
 }
 
@@ -49,9 +49,10 @@ model Session {
 
 model Level {
   id               Int         @default(autoincrement()) @id
-  name             String
-  product          Product []
-  
+  name             String      @unique
+  product          orderProduct []
+  professionLevel  professionLevel []
+  masterProfession masterProfessions[]
 }
 
 model Comment {
@@ -62,45 +63,75 @@ model Comment {
 
 model Brand {
   id               Int         @default(autoincrement()) @id
-  name             String
+  name             String      @unique
   tools            Tools[]
 }
 
-model Capacity {
+model Power {
   id               Int         @default(autoincrement()) @id
-  name             String
+  name             String      @unique
   tools            Tools[]
 }
 
 model Size {
   id               Int         @default(autoincrement()) @id
-  name             String
+  name             String      @unique
   tools            Tools[]
 }
 
 model Master {
   id               Int         @default(autoincrement()) @id
   fullname         String
-  phone            String
-  isActive         String
-  masterSkill      masterSkill[]
-  image            String
-  passportImage    String
-  star             Float
+  phone            String      @unique
+  isActive         Boolean     @default(false)
+  masterProfessions      masterProfessions[]
+  image            String?
+  passportImage    String?
+  star             Float?
   about            String
-  type             String
-  productId        Int?
 }
 
-model masterSkill {
+model masterProfessions {
   id               Int         @default(autoincrement()) @id
-  minWorking_h     Int
+  minWorking_h     Int?
+  professionId     Int
   levelId          Int
-  price_h          Float
-  price_d          Float
+  price_h          Float?
+  price_d          Float?
   experience       Int
-  master           Master[]
-  product          Product[]
+  masterId         Int
+  level            Level        @relation(fields: [levelId],references: [id])
+  profession       Profession   @relation(fields: [professionId], references: [id])
+  master           Master       @relation(fields: [masterId], references: [id])
+}
+
+model professionLevel {
+  id               Int         @default(autoincrement()) @id
+  profession       Profession[]
+  level            Level[]
+  minWorking_h     Int
+  price_h          Int
+  price_d          Int
+}
+
+model Profession {
+  id               Int         @default(autoincrement()) @id
+  name             String
+  image            String
+  isActive         String
+  professionToolId Int
+  professionLevelId Int
+  orderProductId   Int
+  orderProduct    orderProduct @relation(fields: [orderProductId], references: [id])
+  professionTool   professionTool @relation(fields: [professionToolId], references: [id])
+  masterProfession masterProfessions[]
+  professionLevel  professionLevel @relation(fields: [professionLevelId], references: [id])
+}
+
+model professionTool {
+  id               Int         @default(autoincrement()) @id
+  professsion      Profession[]
+  tool             Tools[]
 }
 
 model Tools {
@@ -110,23 +141,23 @@ model Tools {
   price_h          Float
   price_d          Float
   quantity         Int
-  code             Int
+  code             Int        @unique
   brandId          Int
   isActive         String 
   capacityId       Int
   sizeId           Int
   image            String
-  productId        Int
-  product          Product        @relation(fields: [productId], references: [id])
+  productId        Int  
+  professionToolId Int
+  professionTool   professionTool @relation(fields: [professionToolId], references: [id])
+  product          orderProduct   @relation(fields: [productId], references: [id])
   brand            Brand          @relation(fields: [brandId], references: [id])
-  capacity         Capacity       @relation(fields: [capacityId], references: [id])
+  capacity         Power          @relation(fields: [capacityId], references: [id])
   size             Size           @relation(fields: [sizeId], references: [id])
 }
 
 model Order {
   id               Int            @default(autoincrement()) @id
-  productId        Int
-  toolId           Int[]          @default([])
   total            Float
   location         String
   address          String
@@ -136,17 +167,22 @@ model Order {
   status           String
   instruction      String
   userId           Int
-  masters          Int[]           @default([])
+  orderProduct     orderProduct[]
   user             User            @relation(fields: [userId], references: [id])         
 }
 
-model Product {
+model orderProduct {
   id               Int             @default(autoincrement()) @id
-  isActive         String                              
-  minWorking_h     Int
+  isActive         String 
+  timeUnit         String                             
+  workingTime      Int
+  price            Float
+  count            Int
+  orderId          Int
+  order            Order @relation(fields: [orderId], references: [id])
   tools            Tools[]
   level            Level[] 
-  masterSkill      masterSkill[]
+  professions      Profession[]
 }
 
 model FAQ {
