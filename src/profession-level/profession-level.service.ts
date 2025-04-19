@@ -36,10 +36,22 @@ export class ProfessionLevelService {
       const professionLevels = await this.prisma.professionLevel.findMany({
         skip: (page - 1) * pageSize,
         take: pageSize,
-        include: {
-          profession: true,
+        select:{
+          id:true,
+          minWorking_h:true,
+          price_d:true,
+          price_h:true,
+          profession: {
+            include: {
+              tools: {
+                where: {
+                  isActive: true,
+                },
+              },
+            },
+          },
           level: true,
-        },
+      }
       });
 
       const totalCount = await this.prisma.professionLevel.count();
@@ -61,10 +73,22 @@ export class ProfessionLevelService {
   async findOne(id: number) {
     const professionLevel = await this.prisma.professionLevel.findUnique({
       where: { id },
-      include: {
-        profession: true,
+      select:{
+        id:true,
+        minWorking_h:true,
+        price_d:true,
+        price_h:true,
+        profession: {
+          include: {
+            tools: {
+              where: {
+                isActive: true,
+              },
+            },
+          },
+        },
         level: true,
-      },
+    }
     });
 
     if (!professionLevel) {

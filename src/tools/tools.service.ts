@@ -9,9 +9,9 @@ export class ToolsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createToolDto: CreateToolDto) {
-    try {
+    try {      
       const tool = await this.prisma.tools.create({
-        data: { ...createToolDto }
+        data: createToolDto 
       });
       return {tool};
     } catch (error) {

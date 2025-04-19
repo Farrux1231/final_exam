@@ -1,5 +1,73 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsNumber, IsOptional, IsBoolean, IsUrl, IsPhoneNumber } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsOptional,
+  IsBoolean,
+  IsUrl,
+  IsPhoneNumber,
+  IsArray,
+  ValidateNested,
+  IsInt,
+  IsPositive,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+
+export class CreateMasterProfessionDto {
+  @ApiPropertyOptional({
+    description: 'Minimum working hours (optional)',
+    example: 4,
+  })
+  @IsOptional()
+  @IsInt()
+  minWorking_h?: number;
+
+  @ApiProperty({
+    description: 'Profession ID',
+    example: 1,
+  })
+  @IsInt()
+  professionId: number;
+
+  @ApiProperty({
+    description: 'Level ID',
+    example: 1,
+  })
+  @IsInt()
+  levelId: number;
+
+  @ApiPropertyOptional({
+    description: 'Hourly price (optional) in Dollar',
+    example: 15.5,
+  })
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  price_h?: number;
+
+  @ApiPropertyOptional({
+    description: 'Daily price (optional) in Dollar',
+    example: 120.0,
+  })
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  price_d?: number;
+
+  @ApiProperty({
+    description: 'Experience in years',
+    example: 3,
+  })
+  @IsInt()
+  experience: number;
+
+  @ApiProperty({
+    description: 'Master ID',
+    example: 1,
+  })
+  @IsInt()
+  masterId: number;
+}
 
 export class CreateMasterDto {
   @ApiProperty({
@@ -7,21 +75,21 @@ export class CreateMasterDto {
     example: 'John Doe',
   })
   @IsString()
-  fullname: string; 
+  fullname: string;
 
   @ApiProperty({
     description: 'Telefon raqam (unikal)',
     example: '+998901234567',
   })
   @IsPhoneNumber()
-  phone: string; 
+  phone: string;
 
   @ApiProperty({
     description: "Masterning aktiv yoki noaktiv holati",
     example: false,
   })
   @IsBoolean()
-  isActive: boolean; 
+  isActive: boolean;
 
   @ApiPropertyOptional({
     description: "Masterning rasmi URL",
@@ -29,7 +97,7 @@ export class CreateMasterDto {
   })
   @IsOptional()
   @IsUrl()
-  image?: string; 
+  image?: string;
 
   @ApiPropertyOptional({
     description: "Masterning pasport rasmi URL",
@@ -37,7 +105,7 @@ export class CreateMasterDto {
   })
   @IsOptional()
   @IsUrl()
-  passportImage?: string; 
+  passportImage?: string;
 
   @ApiPropertyOptional({
     description: 'Masterning reytingi (Float, ixtiyoriy)',
@@ -45,12 +113,18 @@ export class CreateMasterDto {
   })
   @IsOptional()
   @IsNumber()
-  star?: number; 
+  star?: number;
 
   @ApiProperty({
     description: "Master haqida qisqacha ma'lumot",
     example: 'Experienced professional in software development.',
   })
   @IsString()
-  about: string; 
+  about: string;
+
+  @ApiProperty({ type: [CreateMasterProfessionDto] })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CreateMasterProfessionDto)
+  masterProfessions: CreateMasterProfessionDto[];
 }

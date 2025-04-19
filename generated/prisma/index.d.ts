@@ -16406,7 +16406,7 @@ export namespace Prisma {
     price_d: number
     quantity: number
     code: number
-    brandId: number
+    brandId: number | null
     isActive: boolean
     powerId: number | null
     sizeId: number | null
@@ -16447,7 +16447,7 @@ export namespace Prisma {
     image?: boolean
     orderProduct?: boolean | Tools$orderProductArgs<ExtArgs>
     professions?: boolean | Tools$professionsArgs<ExtArgs>
-    brand?: boolean | BrandDefaultArgs<ExtArgs>
+    brand?: boolean | Tools$brandArgs<ExtArgs>
     power?: boolean | Tools$powerArgs<ExtArgs>
     size?: boolean | Tools$sizeArgs<ExtArgs>
     _count?: boolean | ToolsCountOutputTypeDefaultArgs<ExtArgs>
@@ -16466,7 +16466,7 @@ export namespace Prisma {
     powerId?: boolean
     sizeId?: boolean
     image?: boolean
-    brand?: boolean | BrandDefaultArgs<ExtArgs>
+    brand?: boolean | Tools$brandArgs<ExtArgs>
     power?: boolean | Tools$powerArgs<ExtArgs>
     size?: boolean | Tools$sizeArgs<ExtArgs>
   }, ExtArgs["result"]["tools"]>
@@ -16484,7 +16484,7 @@ export namespace Prisma {
     powerId?: boolean
     sizeId?: boolean
     image?: boolean
-    brand?: boolean | BrandDefaultArgs<ExtArgs>
+    brand?: boolean | Tools$brandArgs<ExtArgs>
     power?: boolean | Tools$powerArgs<ExtArgs>
     size?: boolean | Tools$sizeArgs<ExtArgs>
   }, ExtArgs["result"]["tools"]>
@@ -16508,18 +16508,18 @@ export namespace Prisma {
   export type ToolsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     orderProduct?: boolean | Tools$orderProductArgs<ExtArgs>
     professions?: boolean | Tools$professionsArgs<ExtArgs>
-    brand?: boolean | BrandDefaultArgs<ExtArgs>
+    brand?: boolean | Tools$brandArgs<ExtArgs>
     power?: boolean | Tools$powerArgs<ExtArgs>
     size?: boolean | Tools$sizeArgs<ExtArgs>
     _count?: boolean | ToolsCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ToolsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    brand?: boolean | BrandDefaultArgs<ExtArgs>
+    brand?: boolean | Tools$brandArgs<ExtArgs>
     power?: boolean | Tools$powerArgs<ExtArgs>
     size?: boolean | Tools$sizeArgs<ExtArgs>
   }
   export type ToolsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    brand?: boolean | BrandDefaultArgs<ExtArgs>
+    brand?: boolean | Tools$brandArgs<ExtArgs>
     power?: boolean | Tools$powerArgs<ExtArgs>
     size?: boolean | Tools$sizeArgs<ExtArgs>
   }
@@ -16529,7 +16529,7 @@ export namespace Prisma {
     objects: {
       orderProduct: Prisma.$orderProductPayload<ExtArgs>[]
       professions: Prisma.$ProfessionPayload<ExtArgs>[]
-      brand: Prisma.$BrandPayload<ExtArgs>
+      brand: Prisma.$BrandPayload<ExtArgs> | null
       power: Prisma.$PowerPayload<ExtArgs> | null
       size: Prisma.$SizePayload<ExtArgs> | null
     }
@@ -16541,7 +16541,7 @@ export namespace Prisma {
       price_d: number
       quantity: number
       code: number
-      brandId: number
+      brandId: number | null
       isActive: boolean
       powerId: number | null
       sizeId: number | null
@@ -16942,7 +16942,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     orderProduct<T extends Tools$orderProductArgs<ExtArgs> = {}>(args?: Subset<T, Tools$orderProductArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$orderProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     professions<T extends Tools$professionsArgs<ExtArgs> = {}>(args?: Subset<T, Tools$professionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProfessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    brand<T extends BrandDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BrandDefaultArgs<ExtArgs>>): Prisma__BrandClient<$Result.GetResult<Prisma.$BrandPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    brand<T extends Tools$brandArgs<ExtArgs> = {}>(args?: Subset<T, Tools$brandArgs<ExtArgs>>): Prisma__BrandClient<$Result.GetResult<Prisma.$BrandPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     power<T extends Tools$powerArgs<ExtArgs> = {}>(args?: Subset<T, Tools$powerArgs<ExtArgs>>): Prisma__PowerClient<$Result.GetResult<Prisma.$PowerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     size<T extends Tools$sizeArgs<ExtArgs> = {}>(args?: Subset<T, Tools$sizeArgs<ExtArgs>>): Prisma__SizeClient<$Result.GetResult<Prisma.$SizePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
@@ -17427,6 +17427,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProfessionScalarFieldEnum | ProfessionScalarFieldEnum[]
+  }
+
+  /**
+   * Tools.brand
+   */
+  export type Tools$brandArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Brand
+     */
+    select?: BrandSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Brand
+     */
+    omit?: BrandOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BrandInclude<ExtArgs> | null
+    where?: BrandWhereInput
   }
 
   /**
@@ -18911,10 +18930,10 @@ export namespace Prisma {
     workingTime: number
     price: number
     count: number
-    toolId: number
-    levelId: number
+    toolId: number | null
+    levelId: number | null
     orderId: number
-    professionId: number
+    professionId: number | null
     _count: OrderProductCountAggregateOutputType | null
     _avg: OrderProductAvgAggregateOutputType | null
     _sum: OrderProductSumAggregateOutputType | null
@@ -18948,9 +18967,9 @@ export namespace Prisma {
     orderId?: boolean
     professionId?: boolean
     order?: boolean | OrderDefaultArgs<ExtArgs>
-    tool?: boolean | ToolsDefaultArgs<ExtArgs>
-    level?: boolean | LevelDefaultArgs<ExtArgs>
-    professions?: boolean | ProfessionDefaultArgs<ExtArgs>
+    tool?: boolean | orderProduct$toolArgs<ExtArgs>
+    level?: boolean | orderProduct$levelArgs<ExtArgs>
+    professions?: boolean | orderProduct$professionsArgs<ExtArgs>
   }, ExtArgs["result"]["orderProduct"]>
 
   export type orderProductSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -18965,9 +18984,9 @@ export namespace Prisma {
     orderId?: boolean
     professionId?: boolean
     order?: boolean | OrderDefaultArgs<ExtArgs>
-    tool?: boolean | ToolsDefaultArgs<ExtArgs>
-    level?: boolean | LevelDefaultArgs<ExtArgs>
-    professions?: boolean | ProfessionDefaultArgs<ExtArgs>
+    tool?: boolean | orderProduct$toolArgs<ExtArgs>
+    level?: boolean | orderProduct$levelArgs<ExtArgs>
+    professions?: boolean | orderProduct$professionsArgs<ExtArgs>
   }, ExtArgs["result"]["orderProduct"]>
 
   export type orderProductSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -18982,9 +19001,9 @@ export namespace Prisma {
     orderId?: boolean
     professionId?: boolean
     order?: boolean | OrderDefaultArgs<ExtArgs>
-    tool?: boolean | ToolsDefaultArgs<ExtArgs>
-    level?: boolean | LevelDefaultArgs<ExtArgs>
-    professions?: boolean | ProfessionDefaultArgs<ExtArgs>
+    tool?: boolean | orderProduct$toolArgs<ExtArgs>
+    level?: boolean | orderProduct$levelArgs<ExtArgs>
+    professions?: boolean | orderProduct$professionsArgs<ExtArgs>
   }, ExtArgs["result"]["orderProduct"]>
 
   export type orderProductSelectScalar = {
@@ -19003,30 +19022,30 @@ export namespace Prisma {
   export type orderProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "isActive" | "timeUnit" | "workingTime" | "price" | "count" | "toolId" | "levelId" | "orderId" | "professionId", ExtArgs["result"]["orderProduct"]>
   export type orderProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     order?: boolean | OrderDefaultArgs<ExtArgs>
-    tool?: boolean | ToolsDefaultArgs<ExtArgs>
-    level?: boolean | LevelDefaultArgs<ExtArgs>
-    professions?: boolean | ProfessionDefaultArgs<ExtArgs>
+    tool?: boolean | orderProduct$toolArgs<ExtArgs>
+    level?: boolean | orderProduct$levelArgs<ExtArgs>
+    professions?: boolean | orderProduct$professionsArgs<ExtArgs>
   }
   export type orderProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     order?: boolean | OrderDefaultArgs<ExtArgs>
-    tool?: boolean | ToolsDefaultArgs<ExtArgs>
-    level?: boolean | LevelDefaultArgs<ExtArgs>
-    professions?: boolean | ProfessionDefaultArgs<ExtArgs>
+    tool?: boolean | orderProduct$toolArgs<ExtArgs>
+    level?: boolean | orderProduct$levelArgs<ExtArgs>
+    professions?: boolean | orderProduct$professionsArgs<ExtArgs>
   }
   export type orderProductIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     order?: boolean | OrderDefaultArgs<ExtArgs>
-    tool?: boolean | ToolsDefaultArgs<ExtArgs>
-    level?: boolean | LevelDefaultArgs<ExtArgs>
-    professions?: boolean | ProfessionDefaultArgs<ExtArgs>
+    tool?: boolean | orderProduct$toolArgs<ExtArgs>
+    level?: boolean | orderProduct$levelArgs<ExtArgs>
+    professions?: boolean | orderProduct$professionsArgs<ExtArgs>
   }
 
   export type $orderProductPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "orderProduct"
     objects: {
       order: Prisma.$OrderPayload<ExtArgs>
-      tool: Prisma.$ToolsPayload<ExtArgs>
-      level: Prisma.$LevelPayload<ExtArgs>
-      professions: Prisma.$ProfessionPayload<ExtArgs>
+      tool: Prisma.$ToolsPayload<ExtArgs> | null
+      level: Prisma.$LevelPayload<ExtArgs> | null
+      professions: Prisma.$ProfessionPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -19035,10 +19054,10 @@ export namespace Prisma {
       workingTime: number
       price: number
       count: number
-      toolId: number
-      levelId: number
+      toolId: number | null
+      levelId: number | null
       orderId: number
-      professionId: number
+      professionId: number | null
     }, ExtArgs["result"]["orderProduct"]>
     composites: {}
   }
@@ -19434,9 +19453,9 @@ export namespace Prisma {
   export interface Prisma__orderProductClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     order<T extends OrderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrderDefaultArgs<ExtArgs>>): Prisma__OrderClient<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    tool<T extends ToolsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ToolsDefaultArgs<ExtArgs>>): Prisma__ToolsClient<$Result.GetResult<Prisma.$ToolsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    level<T extends LevelDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LevelDefaultArgs<ExtArgs>>): Prisma__LevelClient<$Result.GetResult<Prisma.$LevelPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    professions<T extends ProfessionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProfessionDefaultArgs<ExtArgs>>): Prisma__ProfessionClient<$Result.GetResult<Prisma.$ProfessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    tool<T extends orderProduct$toolArgs<ExtArgs> = {}>(args?: Subset<T, orderProduct$toolArgs<ExtArgs>>): Prisma__ToolsClient<$Result.GetResult<Prisma.$ToolsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    level<T extends orderProduct$levelArgs<ExtArgs> = {}>(args?: Subset<T, orderProduct$levelArgs<ExtArgs>>): Prisma__LevelClient<$Result.GetResult<Prisma.$LevelPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    professions<T extends orderProduct$professionsArgs<ExtArgs> = {}>(args?: Subset<T, orderProduct$professionsArgs<ExtArgs>>): Prisma__ProfessionClient<$Result.GetResult<Prisma.$ProfessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -19869,6 +19888,63 @@ export namespace Prisma {
      * Limit how many orderProducts to delete.
      */
     limit?: number
+  }
+
+  /**
+   * orderProduct.tool
+   */
+  export type orderProduct$toolArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tools
+     */
+    select?: ToolsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tools
+     */
+    omit?: ToolsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ToolsInclude<ExtArgs> | null
+    where?: ToolsWhereInput
+  }
+
+  /**
+   * orderProduct.level
+   */
+  export type orderProduct$levelArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Level
+     */
+    select?: LevelSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Level
+     */
+    omit?: LevelOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LevelInclude<ExtArgs> | null
+    where?: LevelWhereInput
+  }
+
+  /**
+   * orderProduct.professions
+   */
+  export type orderProduct$professionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Profession
+     */
+    select?: ProfessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Profession
+     */
+    omit?: ProfessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfessionInclude<ExtArgs> | null
+    where?: ProfessionWhereInput
   }
 
   /**
@@ -23971,14 +24047,14 @@ export namespace Prisma {
     price_d?: FloatFilter<"Tools"> | number
     quantity?: IntFilter<"Tools"> | number
     code?: IntFilter<"Tools"> | number
-    brandId?: IntFilter<"Tools"> | number
+    brandId?: IntNullableFilter<"Tools"> | number | null
     isActive?: BoolFilter<"Tools"> | boolean
     powerId?: IntNullableFilter<"Tools"> | number | null
     sizeId?: IntNullableFilter<"Tools"> | number | null
     image?: StringFilter<"Tools"> | string
     orderProduct?: OrderProductListRelationFilter
     professions?: ProfessionListRelationFilter
-    brand?: XOR<BrandScalarRelationFilter, BrandWhereInput>
+    brand?: XOR<BrandNullableScalarRelationFilter, BrandWhereInput> | null
     power?: XOR<PowerNullableScalarRelationFilter, PowerWhereInput> | null
     size?: XOR<SizeNullableScalarRelationFilter, SizeWhereInput> | null
   }
@@ -23991,7 +24067,7 @@ export namespace Prisma {
     price_d?: SortOrder
     quantity?: SortOrder
     code?: SortOrder
-    brandId?: SortOrder
+    brandId?: SortOrderInput | SortOrder
     isActive?: SortOrder
     powerId?: SortOrderInput | SortOrder
     sizeId?: SortOrderInput | SortOrder
@@ -24014,14 +24090,14 @@ export namespace Prisma {
     price_h?: FloatFilter<"Tools"> | number
     price_d?: FloatFilter<"Tools"> | number
     quantity?: IntFilter<"Tools"> | number
-    brandId?: IntFilter<"Tools"> | number
+    brandId?: IntNullableFilter<"Tools"> | number | null
     isActive?: BoolFilter<"Tools"> | boolean
     powerId?: IntNullableFilter<"Tools"> | number | null
     sizeId?: IntNullableFilter<"Tools"> | number | null
     image?: StringFilter<"Tools"> | string
     orderProduct?: OrderProductListRelationFilter
     professions?: ProfessionListRelationFilter
-    brand?: XOR<BrandScalarRelationFilter, BrandWhereInput>
+    brand?: XOR<BrandNullableScalarRelationFilter, BrandWhereInput> | null
     power?: XOR<PowerNullableScalarRelationFilter, PowerWhereInput> | null
     size?: XOR<SizeNullableScalarRelationFilter, SizeWhereInput> | null
   }, "id" | "code">
@@ -24034,7 +24110,7 @@ export namespace Prisma {
     price_d?: SortOrder
     quantity?: SortOrder
     code?: SortOrder
-    brandId?: SortOrder
+    brandId?: SortOrderInput | SortOrder
     isActive?: SortOrder
     powerId?: SortOrderInput | SortOrder
     sizeId?: SortOrderInput | SortOrder
@@ -24057,7 +24133,7 @@ export namespace Prisma {
     price_d?: FloatWithAggregatesFilter<"Tools"> | number
     quantity?: IntWithAggregatesFilter<"Tools"> | number
     code?: IntWithAggregatesFilter<"Tools"> | number
-    brandId?: IntWithAggregatesFilter<"Tools"> | number
+    brandId?: IntNullableWithAggregatesFilter<"Tools"> | number | null
     isActive?: BoolWithAggregatesFilter<"Tools"> | boolean
     powerId?: IntNullableWithAggregatesFilter<"Tools"> | number | null
     sizeId?: IntNullableWithAggregatesFilter<"Tools"> | number | null
@@ -24159,14 +24235,14 @@ export namespace Prisma {
     workingTime?: IntFilter<"orderProduct"> | number
     price?: FloatFilter<"orderProduct"> | number
     count?: IntFilter<"orderProduct"> | number
-    toolId?: IntFilter<"orderProduct"> | number
-    levelId?: IntFilter<"orderProduct"> | number
+    toolId?: IntNullableFilter<"orderProduct"> | number | null
+    levelId?: IntNullableFilter<"orderProduct"> | number | null
     orderId?: IntFilter<"orderProduct"> | number
-    professionId?: IntFilter<"orderProduct"> | number
+    professionId?: IntNullableFilter<"orderProduct"> | number | null
     order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
-    tool?: XOR<ToolsScalarRelationFilter, ToolsWhereInput>
-    level?: XOR<LevelScalarRelationFilter, LevelWhereInput>
-    professions?: XOR<ProfessionScalarRelationFilter, ProfessionWhereInput>
+    tool?: XOR<ToolsNullableScalarRelationFilter, ToolsWhereInput> | null
+    level?: XOR<LevelNullableScalarRelationFilter, LevelWhereInput> | null
+    professions?: XOR<ProfessionNullableScalarRelationFilter, ProfessionWhereInput> | null
   }
 
   export type orderProductOrderByWithRelationInput = {
@@ -24176,10 +24252,10 @@ export namespace Prisma {
     workingTime?: SortOrder
     price?: SortOrder
     count?: SortOrder
-    toolId?: SortOrder
-    levelId?: SortOrder
+    toolId?: SortOrderInput | SortOrder
+    levelId?: SortOrderInput | SortOrder
     orderId?: SortOrder
-    professionId?: SortOrder
+    professionId?: SortOrderInput | SortOrder
     order?: OrderOrderByWithRelationInput
     tool?: ToolsOrderByWithRelationInput
     level?: LevelOrderByWithRelationInput
@@ -24196,14 +24272,14 @@ export namespace Prisma {
     workingTime?: IntFilter<"orderProduct"> | number
     price?: FloatFilter<"orderProduct"> | number
     count?: IntFilter<"orderProduct"> | number
-    toolId?: IntFilter<"orderProduct"> | number
-    levelId?: IntFilter<"orderProduct"> | number
+    toolId?: IntNullableFilter<"orderProduct"> | number | null
+    levelId?: IntNullableFilter<"orderProduct"> | number | null
     orderId?: IntFilter<"orderProduct"> | number
-    professionId?: IntFilter<"orderProduct"> | number
+    professionId?: IntNullableFilter<"orderProduct"> | number | null
     order?: XOR<OrderScalarRelationFilter, OrderWhereInput>
-    tool?: XOR<ToolsScalarRelationFilter, ToolsWhereInput>
-    level?: XOR<LevelScalarRelationFilter, LevelWhereInput>
-    professions?: XOR<ProfessionScalarRelationFilter, ProfessionWhereInput>
+    tool?: XOR<ToolsNullableScalarRelationFilter, ToolsWhereInput> | null
+    level?: XOR<LevelNullableScalarRelationFilter, LevelWhereInput> | null
+    professions?: XOR<ProfessionNullableScalarRelationFilter, ProfessionWhereInput> | null
   }, "id">
 
   export type orderProductOrderByWithAggregationInput = {
@@ -24213,10 +24289,10 @@ export namespace Prisma {
     workingTime?: SortOrder
     price?: SortOrder
     count?: SortOrder
-    toolId?: SortOrder
-    levelId?: SortOrder
+    toolId?: SortOrderInput | SortOrder
+    levelId?: SortOrderInput | SortOrder
     orderId?: SortOrder
-    professionId?: SortOrder
+    professionId?: SortOrderInput | SortOrder
     _count?: orderProductCountOrderByAggregateInput
     _avg?: orderProductAvgOrderByAggregateInput
     _max?: orderProductMaxOrderByAggregateInput
@@ -24234,10 +24310,10 @@ export namespace Prisma {
     workingTime?: IntWithAggregatesFilter<"orderProduct"> | number
     price?: FloatWithAggregatesFilter<"orderProduct"> | number
     count?: IntWithAggregatesFilter<"orderProduct"> | number
-    toolId?: IntWithAggregatesFilter<"orderProduct"> | number
-    levelId?: IntWithAggregatesFilter<"orderProduct"> | number
+    toolId?: IntNullableWithAggregatesFilter<"orderProduct"> | number | null
+    levelId?: IntNullableWithAggregatesFilter<"orderProduct"> | number | null
     orderId?: IntWithAggregatesFilter<"orderProduct"> | number
-    professionId?: IntWithAggregatesFilter<"orderProduct"> | number
+    professionId?: IntNullableWithAggregatesFilter<"orderProduct"> | number | null
   }
 
   export type FAQWhereInput = {
@@ -25056,11 +25132,11 @@ export namespace Prisma {
     price_d: number
     quantity: number
     code: number
-    isActive: boolean
+    isActive?: boolean
     image: string
     orderProduct?: orderProductCreateNestedManyWithoutToolInput
     professions?: ProfessionCreateNestedManyWithoutToolsInput
-    brand: BrandCreateNestedOneWithoutToolsInput
+    brand?: BrandCreateNestedOneWithoutToolsInput
     power?: PowerCreateNestedOneWithoutToolsInput
     size?: SizeCreateNestedOneWithoutToolsInput
   }
@@ -25073,8 +25149,8 @@ export namespace Prisma {
     price_d: number
     quantity: number
     code: number
-    brandId: number
-    isActive: boolean
+    brandId?: number | null
+    isActive?: boolean
     powerId?: number | null
     sizeId?: number | null
     image: string
@@ -25093,7 +25169,7 @@ export namespace Prisma {
     image?: StringFieldUpdateOperationsInput | string
     orderProduct?: orderProductUpdateManyWithoutToolNestedInput
     professions?: ProfessionUpdateManyWithoutToolsNestedInput
-    brand?: BrandUpdateOneRequiredWithoutToolsNestedInput
+    brand?: BrandUpdateOneWithoutToolsNestedInput
     power?: PowerUpdateOneWithoutToolsNestedInput
     size?: SizeUpdateOneWithoutToolsNestedInput
   }
@@ -25106,7 +25182,7 @@ export namespace Prisma {
     price_d?: FloatFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     code?: IntFieldUpdateOperationsInput | number
-    brandId?: IntFieldUpdateOperationsInput | number
+    brandId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     powerId?: NullableIntFieldUpdateOperationsInput | number | null
     sizeId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -25123,8 +25199,8 @@ export namespace Prisma {
     price_d: number
     quantity: number
     code: number
-    brandId: number
-    isActive: boolean
+    brandId?: number | null
+    isActive?: boolean
     powerId?: number | null
     sizeId?: number | null
     image: string
@@ -25149,7 +25225,7 @@ export namespace Prisma {
     price_d?: FloatFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     code?: IntFieldUpdateOperationsInput | number
-    brandId?: IntFieldUpdateOperationsInput | number
+    brandId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     powerId?: NullableIntFieldUpdateOperationsInput | number | null
     sizeId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -25254,9 +25330,9 @@ export namespace Prisma {
     price: number
     count: number
     order: OrderCreateNestedOneWithoutOrderProductInput
-    tool: ToolsCreateNestedOneWithoutOrderProductInput
-    level: LevelCreateNestedOneWithoutProductInput
-    professions: ProfessionCreateNestedOneWithoutOrderProductInput
+    tool?: ToolsCreateNestedOneWithoutOrderProductInput
+    level?: LevelCreateNestedOneWithoutProductInput
+    professions?: ProfessionCreateNestedOneWithoutOrderProductInput
   }
 
   export type orderProductUncheckedCreateInput = {
@@ -25266,10 +25342,10 @@ export namespace Prisma {
     workingTime: number
     price: number
     count: number
-    toolId: number
-    levelId: number
+    toolId?: number | null
+    levelId?: number | null
     orderId: number
-    professionId: number
+    professionId?: number | null
   }
 
   export type orderProductUpdateInput = {
@@ -25279,9 +25355,9 @@ export namespace Prisma {
     price?: FloatFieldUpdateOperationsInput | number
     count?: IntFieldUpdateOperationsInput | number
     order?: OrderUpdateOneRequiredWithoutOrderProductNestedInput
-    tool?: ToolsUpdateOneRequiredWithoutOrderProductNestedInput
-    level?: LevelUpdateOneRequiredWithoutProductNestedInput
-    professions?: ProfessionUpdateOneRequiredWithoutOrderProductNestedInput
+    tool?: ToolsUpdateOneWithoutOrderProductNestedInput
+    level?: LevelUpdateOneWithoutProductNestedInput
+    professions?: ProfessionUpdateOneWithoutOrderProductNestedInput
   }
 
   export type orderProductUncheckedUpdateInput = {
@@ -25291,10 +25367,10 @@ export namespace Prisma {
     workingTime?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
     count?: IntFieldUpdateOperationsInput | number
-    toolId?: IntFieldUpdateOperationsInput | number
-    levelId?: IntFieldUpdateOperationsInput | number
+    toolId?: NullableIntFieldUpdateOperationsInput | number | null
+    levelId?: NullableIntFieldUpdateOperationsInput | number | null
     orderId?: IntFieldUpdateOperationsInput | number
-    professionId?: IntFieldUpdateOperationsInput | number
+    professionId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type orderProductCreateManyInput = {
@@ -25304,10 +25380,10 @@ export namespace Prisma {
     workingTime: number
     price: number
     count: number
-    toolId: number
-    levelId: number
+    toolId?: number | null
+    levelId?: number | null
     orderId: number
-    professionId: number
+    professionId?: number | null
   }
 
   export type orderProductUpdateManyMutationInput = {
@@ -25325,10 +25401,10 @@ export namespace Prisma {
     workingTime?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
     count?: IntFieldUpdateOperationsInput | number
-    toolId?: IntFieldUpdateOperationsInput | number
-    levelId?: IntFieldUpdateOperationsInput | number
+    toolId?: NullableIntFieldUpdateOperationsInput | number | null
+    levelId?: NullableIntFieldUpdateOperationsInput | number | null
     orderId?: IntFieldUpdateOperationsInput | number
-    professionId?: IntFieldUpdateOperationsInput | number
+    professionId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type FAQCreateInput = {
@@ -26206,9 +26282,9 @@ export namespace Prisma {
     none?: ProfessionWhereInput
   }
 
-  export type BrandScalarRelationFilter = {
-    is?: BrandWhereInput
-    isNot?: BrandWhereInput
+  export type BrandNullableScalarRelationFilter = {
+    is?: BrandWhereInput | null
+    isNot?: BrandWhereInput | null
   }
 
   export type PowerNullableScalarRelationFilter = {
@@ -26348,9 +26424,19 @@ export namespace Prisma {
     isNot?: OrderWhereInput
   }
 
-  export type ToolsScalarRelationFilter = {
-    is?: ToolsWhereInput
-    isNot?: ToolsWhereInput
+  export type ToolsNullableScalarRelationFilter = {
+    is?: ToolsWhereInput | null
+    isNot?: ToolsWhereInput | null
+  }
+
+  export type LevelNullableScalarRelationFilter = {
+    is?: LevelWhereInput | null
+    isNot?: LevelWhereInput | null
+  }
+
+  export type ProfessionNullableScalarRelationFilter = {
+    is?: ProfessionWhereInput | null
+    isNot?: ProfessionWhereInput | null
   }
 
   export type orderProductCountOrderByAggregateInput = {
@@ -27305,10 +27391,12 @@ export namespace Prisma {
     deleteMany?: ProfessionScalarWhereInput | ProfessionScalarWhereInput[]
   }
 
-  export type BrandUpdateOneRequiredWithoutToolsNestedInput = {
+  export type BrandUpdateOneWithoutToolsNestedInput = {
     create?: XOR<BrandCreateWithoutToolsInput, BrandUncheckedCreateWithoutToolsInput>
     connectOrCreate?: BrandCreateOrConnectWithoutToolsInput
     upsert?: BrandUpsertWithoutToolsInput
+    disconnect?: BrandWhereInput | boolean
+    delete?: BrandWhereInput | boolean
     connect?: BrandWhereUniqueInput
     update?: XOR<XOR<BrandUpdateToOneWithWhereWithoutToolsInput, BrandUpdateWithoutToolsInput>, BrandUncheckedUpdateWithoutToolsInput>
   }
@@ -27448,26 +27536,32 @@ export namespace Prisma {
     update?: XOR<XOR<OrderUpdateToOneWithWhereWithoutOrderProductInput, OrderUpdateWithoutOrderProductInput>, OrderUncheckedUpdateWithoutOrderProductInput>
   }
 
-  export type ToolsUpdateOneRequiredWithoutOrderProductNestedInput = {
+  export type ToolsUpdateOneWithoutOrderProductNestedInput = {
     create?: XOR<ToolsCreateWithoutOrderProductInput, ToolsUncheckedCreateWithoutOrderProductInput>
     connectOrCreate?: ToolsCreateOrConnectWithoutOrderProductInput
     upsert?: ToolsUpsertWithoutOrderProductInput
+    disconnect?: ToolsWhereInput | boolean
+    delete?: ToolsWhereInput | boolean
     connect?: ToolsWhereUniqueInput
     update?: XOR<XOR<ToolsUpdateToOneWithWhereWithoutOrderProductInput, ToolsUpdateWithoutOrderProductInput>, ToolsUncheckedUpdateWithoutOrderProductInput>
   }
 
-  export type LevelUpdateOneRequiredWithoutProductNestedInput = {
+  export type LevelUpdateOneWithoutProductNestedInput = {
     create?: XOR<LevelCreateWithoutProductInput, LevelUncheckedCreateWithoutProductInput>
     connectOrCreate?: LevelCreateOrConnectWithoutProductInput
     upsert?: LevelUpsertWithoutProductInput
+    disconnect?: LevelWhereInput | boolean
+    delete?: LevelWhereInput | boolean
     connect?: LevelWhereUniqueInput
     update?: XOR<XOR<LevelUpdateToOneWithWhereWithoutProductInput, LevelUpdateWithoutProductInput>, LevelUncheckedUpdateWithoutProductInput>
   }
 
-  export type ProfessionUpdateOneRequiredWithoutOrderProductNestedInput = {
+  export type ProfessionUpdateOneWithoutOrderProductNestedInput = {
     create?: XOR<ProfessionCreateWithoutOrderProductInput, ProfessionUncheckedCreateWithoutOrderProductInput>
     connectOrCreate?: ProfessionCreateOrConnectWithoutOrderProductInput
     upsert?: ProfessionUpsertWithoutOrderProductInput
+    disconnect?: ProfessionWhereInput | boolean
+    delete?: ProfessionWhereInput | boolean
     connect?: ProfessionWhereUniqueInput
     update?: XOR<XOR<ProfessionUpdateToOneWithWhereWithoutOrderProductInput, ProfessionUpdateWithoutOrderProductInput>, ProfessionUncheckedUpdateWithoutOrderProductInput>
   }
@@ -27995,8 +28089,8 @@ export namespace Prisma {
     price: number
     count: number
     order: OrderCreateNestedOneWithoutOrderProductInput
-    tool: ToolsCreateNestedOneWithoutOrderProductInput
-    professions: ProfessionCreateNestedOneWithoutOrderProductInput
+    tool?: ToolsCreateNestedOneWithoutOrderProductInput
+    professions?: ProfessionCreateNestedOneWithoutOrderProductInput
   }
 
   export type orderProductUncheckedCreateWithoutLevelInput = {
@@ -28006,9 +28100,9 @@ export namespace Prisma {
     workingTime: number
     price: number
     count: number
-    toolId: number
+    toolId?: number | null
     orderId: number
-    professionId: number
+    professionId?: number | null
   }
 
   export type orderProductCreateOrConnectWithoutLevelInput = {
@@ -28101,10 +28195,10 @@ export namespace Prisma {
     workingTime?: IntFilter<"orderProduct"> | number
     price?: FloatFilter<"orderProduct"> | number
     count?: IntFilter<"orderProduct"> | number
-    toolId?: IntFilter<"orderProduct"> | number
-    levelId?: IntFilter<"orderProduct"> | number
+    toolId?: IntNullableFilter<"orderProduct"> | number | null
+    levelId?: IntNullableFilter<"orderProduct"> | number | null
     orderId?: IntFilter<"orderProduct"> | number
-    professionId?: IntFilter<"orderProduct"> | number
+    professionId?: IntNullableFilter<"orderProduct"> | number | null
   }
 
   export type professionLevelUpsertWithWhereUniqueWithoutLevelInput = {
@@ -28172,7 +28266,7 @@ export namespace Prisma {
     price_d: number
     quantity: number
     code: number
-    isActive: boolean
+    isActive?: boolean
     image: string
     orderProduct?: orderProductCreateNestedManyWithoutToolInput
     professions?: ProfessionCreateNestedManyWithoutToolsInput
@@ -28188,7 +28282,7 @@ export namespace Prisma {
     price_d: number
     quantity: number
     code: number
-    isActive: boolean
+    isActive?: boolean
     powerId?: number | null
     sizeId?: number | null
     image: string
@@ -28233,7 +28327,7 @@ export namespace Prisma {
     price_d?: FloatFilter<"Tools"> | number
     quantity?: IntFilter<"Tools"> | number
     code?: IntFilter<"Tools"> | number
-    brandId?: IntFilter<"Tools"> | number
+    brandId?: IntNullableFilter<"Tools"> | number | null
     isActive?: BoolFilter<"Tools"> | boolean
     powerId?: IntNullableFilter<"Tools"> | number | null
     sizeId?: IntNullableFilter<"Tools"> | number | null
@@ -28247,11 +28341,11 @@ export namespace Prisma {
     price_d: number
     quantity: number
     code: number
-    isActive: boolean
+    isActive?: boolean
     image: string
     orderProduct?: orderProductCreateNestedManyWithoutToolInput
     professions?: ProfessionCreateNestedManyWithoutToolsInput
-    brand: BrandCreateNestedOneWithoutToolsInput
+    brand?: BrandCreateNestedOneWithoutToolsInput
     size?: SizeCreateNestedOneWithoutToolsInput
   }
 
@@ -28263,8 +28357,8 @@ export namespace Prisma {
     price_d: number
     quantity: number
     code: number
-    brandId: number
-    isActive: boolean
+    brandId?: number | null
+    isActive?: boolean
     sizeId?: number | null
     image: string
     orderProduct?: orderProductUncheckedCreateNestedManyWithoutToolInput
@@ -28304,11 +28398,11 @@ export namespace Prisma {
     price_d: number
     quantity: number
     code: number
-    isActive: boolean
+    isActive?: boolean
     image: string
     orderProduct?: orderProductCreateNestedManyWithoutToolInput
     professions?: ProfessionCreateNestedManyWithoutToolsInput
-    brand: BrandCreateNestedOneWithoutToolsInput
+    brand?: BrandCreateNestedOneWithoutToolsInput
     power?: PowerCreateNestedOneWithoutToolsInput
   }
 
@@ -28320,8 +28414,8 @@ export namespace Prisma {
     price_d: number
     quantity: number
     code: number
-    brandId: number
-    isActive: boolean
+    brandId?: number | null
+    isActive?: boolean
     powerId?: number | null
     image: string
     orderProduct?: orderProductUncheckedCreateNestedManyWithoutToolInput
@@ -28656,8 +28750,8 @@ export namespace Prisma {
     price: number
     count: number
     order: OrderCreateNestedOneWithoutOrderProductInput
-    tool: ToolsCreateNestedOneWithoutOrderProductInput
-    level: LevelCreateNestedOneWithoutProductInput
+    tool?: ToolsCreateNestedOneWithoutOrderProductInput
+    level?: LevelCreateNestedOneWithoutProductInput
   }
 
   export type orderProductUncheckedCreateWithoutProfessionsInput = {
@@ -28667,8 +28761,8 @@ export namespace Prisma {
     workingTime: number
     price: number
     count: number
-    toolId: number
-    levelId: number
+    toolId?: number | null
+    levelId?: number | null
     orderId: number
   }
 
@@ -28743,10 +28837,10 @@ export namespace Prisma {
     price_d: number
     quantity: number
     code: number
-    isActive: boolean
+    isActive?: boolean
     image: string
     orderProduct?: orderProductCreateNestedManyWithoutToolInput
-    brand: BrandCreateNestedOneWithoutToolsInput
+    brand?: BrandCreateNestedOneWithoutToolsInput
     power?: PowerCreateNestedOneWithoutToolsInput
     size?: SizeCreateNestedOneWithoutToolsInput
   }
@@ -28759,8 +28853,8 @@ export namespace Prisma {
     price_d: number
     quantity: number
     code: number
-    brandId: number
-    isActive: boolean
+    brandId?: number | null
+    isActive?: boolean
     powerId?: number | null
     sizeId?: number | null
     image: string
@@ -28843,8 +28937,8 @@ export namespace Prisma {
     price: number
     count: number
     order: OrderCreateNestedOneWithoutOrderProductInput
-    level: LevelCreateNestedOneWithoutProductInput
-    professions: ProfessionCreateNestedOneWithoutOrderProductInput
+    level?: LevelCreateNestedOneWithoutProductInput
+    professions?: ProfessionCreateNestedOneWithoutOrderProductInput
   }
 
   export type orderProductUncheckedCreateWithoutToolInput = {
@@ -28854,9 +28948,9 @@ export namespace Prisma {
     workingTime: number
     price: number
     count: number
-    levelId: number
+    levelId?: number | null
     orderId: number
-    professionId: number
+    professionId?: number | null
   }
 
   export type orderProductCreateOrConnectWithoutToolInput = {
@@ -29043,9 +29137,9 @@ export namespace Prisma {
     workingTime: number
     price: number
     count: number
-    tool: ToolsCreateNestedOneWithoutOrderProductInput
-    level: LevelCreateNestedOneWithoutProductInput
-    professions: ProfessionCreateNestedOneWithoutOrderProductInput
+    tool?: ToolsCreateNestedOneWithoutOrderProductInput
+    level?: LevelCreateNestedOneWithoutProductInput
+    professions?: ProfessionCreateNestedOneWithoutOrderProductInput
   }
 
   export type orderProductUncheckedCreateWithoutOrderInput = {
@@ -29055,9 +29149,9 @@ export namespace Prisma {
     workingTime: number
     price: number
     count: number
-    toolId: number
-    levelId: number
-    professionId: number
+    toolId?: number | null
+    levelId?: number | null
+    professionId?: number | null
   }
 
   export type orderProductCreateOrConnectWithoutOrderInput = {
@@ -29205,10 +29299,10 @@ export namespace Prisma {
     price_d: number
     quantity: number
     code: number
-    isActive: boolean
+    isActive?: boolean
     image: string
     professions?: ProfessionCreateNestedManyWithoutToolsInput
-    brand: BrandCreateNestedOneWithoutToolsInput
+    brand?: BrandCreateNestedOneWithoutToolsInput
     power?: PowerCreateNestedOneWithoutToolsInput
     size?: SizeCreateNestedOneWithoutToolsInput
   }
@@ -29221,8 +29315,8 @@ export namespace Prisma {
     price_d: number
     quantity: number
     code: number
-    brandId: number
-    isActive: boolean
+    brandId?: number | null
+    isActive?: boolean
     powerId?: number | null
     sizeId?: number | null
     image: string
@@ -29333,7 +29427,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     image?: StringFieldUpdateOperationsInput | string
     professions?: ProfessionUpdateManyWithoutToolsNestedInput
-    brand?: BrandUpdateOneRequiredWithoutToolsNestedInput
+    brand?: BrandUpdateOneWithoutToolsNestedInput
     power?: PowerUpdateOneWithoutToolsNestedInput
     size?: SizeUpdateOneWithoutToolsNestedInput
   }
@@ -29346,7 +29440,7 @@ export namespace Prisma {
     price_d?: FloatFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     code?: IntFieldUpdateOperationsInput | number
-    brandId?: IntFieldUpdateOperationsInput | number
+    brandId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     powerId?: NullableIntFieldUpdateOperationsInput | number | null
     sizeId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -29550,9 +29644,9 @@ export namespace Prisma {
     workingTime: number
     price: number
     count: number
-    toolId: number
+    toolId?: number | null
     orderId: number
-    professionId: number
+    professionId?: number | null
   }
 
   export type professionLevelCreateManyLevelInput = {
@@ -29580,8 +29674,8 @@ export namespace Prisma {
     price?: FloatFieldUpdateOperationsInput | number
     count?: IntFieldUpdateOperationsInput | number
     order?: OrderUpdateOneRequiredWithoutOrderProductNestedInput
-    tool?: ToolsUpdateOneRequiredWithoutOrderProductNestedInput
-    professions?: ProfessionUpdateOneRequiredWithoutOrderProductNestedInput
+    tool?: ToolsUpdateOneWithoutOrderProductNestedInput
+    professions?: ProfessionUpdateOneWithoutOrderProductNestedInput
   }
 
   export type orderProductUncheckedUpdateWithoutLevelInput = {
@@ -29591,9 +29685,9 @@ export namespace Prisma {
     workingTime?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
     count?: IntFieldUpdateOperationsInput | number
-    toolId?: IntFieldUpdateOperationsInput | number
+    toolId?: NullableIntFieldUpdateOperationsInput | number | null
     orderId?: IntFieldUpdateOperationsInput | number
-    professionId?: IntFieldUpdateOperationsInput | number
+    professionId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type orderProductUncheckedUpdateManyWithoutLevelInput = {
@@ -29603,9 +29697,9 @@ export namespace Prisma {
     workingTime?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
     count?: IntFieldUpdateOperationsInput | number
-    toolId?: IntFieldUpdateOperationsInput | number
+    toolId?: NullableIntFieldUpdateOperationsInput | number | null
     orderId?: IntFieldUpdateOperationsInput | number
-    professionId?: IntFieldUpdateOperationsInput | number
+    professionId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type professionLevelUpdateWithoutLevelInput = {
@@ -29668,7 +29762,7 @@ export namespace Prisma {
     price_d: number
     quantity: number
     code: number
-    isActive: boolean
+    isActive?: boolean
     powerId?: number | null
     sizeId?: number | null
     image: string
@@ -29727,8 +29821,8 @@ export namespace Prisma {
     price_d: number
     quantity: number
     code: number
-    brandId: number
-    isActive: boolean
+    brandId?: number | null
+    isActive?: boolean
     sizeId?: number | null
     image: string
   }
@@ -29744,7 +29838,7 @@ export namespace Prisma {
     image?: StringFieldUpdateOperationsInput | string
     orderProduct?: orderProductUpdateManyWithoutToolNestedInput
     professions?: ProfessionUpdateManyWithoutToolsNestedInput
-    brand?: BrandUpdateOneRequiredWithoutToolsNestedInput
+    brand?: BrandUpdateOneWithoutToolsNestedInput
     size?: SizeUpdateOneWithoutToolsNestedInput
   }
 
@@ -29756,7 +29850,7 @@ export namespace Prisma {
     price_d?: FloatFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     code?: IntFieldUpdateOperationsInput | number
-    brandId?: IntFieldUpdateOperationsInput | number
+    brandId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     sizeId?: NullableIntFieldUpdateOperationsInput | number | null
     image?: StringFieldUpdateOperationsInput | string
@@ -29772,7 +29866,7 @@ export namespace Prisma {
     price_d?: FloatFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     code?: IntFieldUpdateOperationsInput | number
-    brandId?: IntFieldUpdateOperationsInput | number
+    brandId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     sizeId?: NullableIntFieldUpdateOperationsInput | number | null
     image?: StringFieldUpdateOperationsInput | string
@@ -29786,8 +29880,8 @@ export namespace Prisma {
     price_d: number
     quantity: number
     code: number
-    brandId: number
-    isActive: boolean
+    brandId?: number | null
+    isActive?: boolean
     powerId?: number | null
     image: string
   }
@@ -29803,7 +29897,7 @@ export namespace Prisma {
     image?: StringFieldUpdateOperationsInput | string
     orderProduct?: orderProductUpdateManyWithoutToolNestedInput
     professions?: ProfessionUpdateManyWithoutToolsNestedInput
-    brand?: BrandUpdateOneRequiredWithoutToolsNestedInput
+    brand?: BrandUpdateOneWithoutToolsNestedInput
     power?: PowerUpdateOneWithoutToolsNestedInput
   }
 
@@ -29815,7 +29909,7 @@ export namespace Prisma {
     price_d?: FloatFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     code?: IntFieldUpdateOperationsInput | number
-    brandId?: IntFieldUpdateOperationsInput | number
+    brandId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     powerId?: NullableIntFieldUpdateOperationsInput | number | null
     image?: StringFieldUpdateOperationsInput | string
@@ -29831,7 +29925,7 @@ export namespace Prisma {
     price_d?: FloatFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     code?: IntFieldUpdateOperationsInput | number
-    brandId?: IntFieldUpdateOperationsInput | number
+    brandId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     powerId?: NullableIntFieldUpdateOperationsInput | number | null
     image?: StringFieldUpdateOperationsInput | string
@@ -29883,8 +29977,8 @@ export namespace Prisma {
     workingTime: number
     price: number
     count: number
-    toolId: number
-    levelId: number
+    toolId?: number | null
+    levelId?: number | null
     orderId: number
   }
 
@@ -29913,8 +30007,8 @@ export namespace Prisma {
     price?: FloatFieldUpdateOperationsInput | number
     count?: IntFieldUpdateOperationsInput | number
     order?: OrderUpdateOneRequiredWithoutOrderProductNestedInput
-    tool?: ToolsUpdateOneRequiredWithoutOrderProductNestedInput
-    level?: LevelUpdateOneRequiredWithoutProductNestedInput
+    tool?: ToolsUpdateOneWithoutOrderProductNestedInput
+    level?: LevelUpdateOneWithoutProductNestedInput
   }
 
   export type orderProductUncheckedUpdateWithoutProfessionsInput = {
@@ -29924,8 +30018,8 @@ export namespace Prisma {
     workingTime?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
     count?: IntFieldUpdateOperationsInput | number
-    toolId?: IntFieldUpdateOperationsInput | number
-    levelId?: IntFieldUpdateOperationsInput | number
+    toolId?: NullableIntFieldUpdateOperationsInput | number | null
+    levelId?: NullableIntFieldUpdateOperationsInput | number | null
     orderId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -29936,8 +30030,8 @@ export namespace Prisma {
     workingTime?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
     count?: IntFieldUpdateOperationsInput | number
-    toolId?: IntFieldUpdateOperationsInput | number
-    levelId?: IntFieldUpdateOperationsInput | number
+    toolId?: NullableIntFieldUpdateOperationsInput | number | null
+    levelId?: NullableIntFieldUpdateOperationsInput | number | null
     orderId?: IntFieldUpdateOperationsInput | number
   }
 
@@ -30003,7 +30097,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     image?: StringFieldUpdateOperationsInput | string
     orderProduct?: orderProductUpdateManyWithoutToolNestedInput
-    brand?: BrandUpdateOneRequiredWithoutToolsNestedInput
+    brand?: BrandUpdateOneWithoutToolsNestedInput
     power?: PowerUpdateOneWithoutToolsNestedInput
     size?: SizeUpdateOneWithoutToolsNestedInput
   }
@@ -30016,7 +30110,7 @@ export namespace Prisma {
     price_d?: FloatFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     code?: IntFieldUpdateOperationsInput | number
-    brandId?: IntFieldUpdateOperationsInput | number
+    brandId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     powerId?: NullableIntFieldUpdateOperationsInput | number | null
     sizeId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -30032,7 +30126,7 @@ export namespace Prisma {
     price_d?: FloatFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     code?: IntFieldUpdateOperationsInput | number
-    brandId?: IntFieldUpdateOperationsInput | number
+    brandId?: NullableIntFieldUpdateOperationsInput | number | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     powerId?: NullableIntFieldUpdateOperationsInput | number | null
     sizeId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -30046,9 +30140,9 @@ export namespace Prisma {
     workingTime: number
     price: number
     count: number
-    levelId: number
+    levelId?: number | null
     orderId: number
-    professionId: number
+    professionId?: number | null
   }
 
   export type orderProductUpdateWithoutToolInput = {
@@ -30058,8 +30152,8 @@ export namespace Prisma {
     price?: FloatFieldUpdateOperationsInput | number
     count?: IntFieldUpdateOperationsInput | number
     order?: OrderUpdateOneRequiredWithoutOrderProductNestedInput
-    level?: LevelUpdateOneRequiredWithoutProductNestedInput
-    professions?: ProfessionUpdateOneRequiredWithoutOrderProductNestedInput
+    level?: LevelUpdateOneWithoutProductNestedInput
+    professions?: ProfessionUpdateOneWithoutOrderProductNestedInput
   }
 
   export type orderProductUncheckedUpdateWithoutToolInput = {
@@ -30069,9 +30163,9 @@ export namespace Prisma {
     workingTime?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
     count?: IntFieldUpdateOperationsInput | number
-    levelId?: IntFieldUpdateOperationsInput | number
+    levelId?: NullableIntFieldUpdateOperationsInput | number | null
     orderId?: IntFieldUpdateOperationsInput | number
-    professionId?: IntFieldUpdateOperationsInput | number
+    professionId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type orderProductUncheckedUpdateManyWithoutToolInput = {
@@ -30081,9 +30175,9 @@ export namespace Prisma {
     workingTime?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
     count?: IntFieldUpdateOperationsInput | number
-    levelId?: IntFieldUpdateOperationsInput | number
+    levelId?: NullableIntFieldUpdateOperationsInput | number | null
     orderId?: IntFieldUpdateOperationsInput | number
-    professionId?: IntFieldUpdateOperationsInput | number
+    professionId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ProfessionUpdateWithoutToolsInput = {
@@ -30119,9 +30213,9 @@ export namespace Prisma {
     workingTime: number
     price: number
     count: number
-    toolId: number
-    levelId: number
-    professionId: number
+    toolId?: number | null
+    levelId?: number | null
+    professionId?: number | null
   }
 
   export type orderProductUpdateWithoutOrderInput = {
@@ -30130,9 +30224,9 @@ export namespace Prisma {
     workingTime?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
     count?: IntFieldUpdateOperationsInput | number
-    tool?: ToolsUpdateOneRequiredWithoutOrderProductNestedInput
-    level?: LevelUpdateOneRequiredWithoutProductNestedInput
-    professions?: ProfessionUpdateOneRequiredWithoutOrderProductNestedInput
+    tool?: ToolsUpdateOneWithoutOrderProductNestedInput
+    level?: LevelUpdateOneWithoutProductNestedInput
+    professions?: ProfessionUpdateOneWithoutOrderProductNestedInput
   }
 
   export type orderProductUncheckedUpdateWithoutOrderInput = {
@@ -30142,9 +30236,9 @@ export namespace Prisma {
     workingTime?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
     count?: IntFieldUpdateOperationsInput | number
-    toolId?: IntFieldUpdateOperationsInput | number
-    levelId?: IntFieldUpdateOperationsInput | number
-    professionId?: IntFieldUpdateOperationsInput | number
+    toolId?: NullableIntFieldUpdateOperationsInput | number | null
+    levelId?: NullableIntFieldUpdateOperationsInput | number | null
+    professionId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type orderProductUncheckedUpdateManyWithoutOrderInput = {
@@ -30154,9 +30248,9 @@ export namespace Prisma {
     workingTime?: IntFieldUpdateOperationsInput | number
     price?: FloatFieldUpdateOperationsInput | number
     count?: IntFieldUpdateOperationsInput | number
-    toolId?: IntFieldUpdateOperationsInput | number
-    levelId?: IntFieldUpdateOperationsInput | number
-    professionId?: IntFieldUpdateOperationsInput | number
+    toolId?: NullableIntFieldUpdateOperationsInput | number | null
+    levelId?: NullableIntFieldUpdateOperationsInput | number | null
+    professionId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
 

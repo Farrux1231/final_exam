@@ -9,12 +9,28 @@ export class MasterService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createMasterDto: CreateMasterDto) {
-    return await this.prisma.master.create({
+    const { masterProfessions, ...masterData } = createMasterDto;
+
+    const createdMaster = await this.prisma.master.create({
       data: {
-        ...createMasterDto,
+        ...masterData,
       },
     });
-  }
+  
+    if (masterProfessions && masterProfessions.length > 0) {
+      await Promise.all(
+        masterProfessions.map((profession) =>
+          this.prisma.masterProfessions.create({
+            data: {
+              ...profession,
+              masterId: createdMaster.id, 
+            },
+          })
+        )
+      );
+    }
+  } 
+
 
   async findAll(page: number = 1, pageSize: number = 10) {
     const skip = (page - 1) * pageSize;

@@ -17,9 +17,10 @@ import { MasterProfessionModule } from './master-profession/master-profession.mo
 import { ProfessionLevelModule } from './profession-level/profession-level.module';
 import { ProfessionModule } from './profession/profession.module';
 import { ToolsModule } from './tools/tools.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
-  imports: [GeneralInfoModule, ContactModule, FaqModule, PrismaModule, UserModule, RegionModule, LevelModule, CommentModule, SizeModule, BrandModule, PowerModule, MasterModule, MasterProfessionModule, ProfessionLevelModule, ProfessionModule, ToolsModule],
+  imports: [GeneralInfoModule, ContactModule, FaqModule, PrismaModule, UserModule, RegionModule, LevelModule, CommentModule, SizeModule, BrandModule, PowerModule, MasterModule, MasterProfessionModule, ProfessionLevelModule, ProfessionModule, ToolsModule, OrderModule],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -135,14 +135,14 @@ model Tools {
   price_d      Float
   quantity     Int
   code         Int            @unique
-  brandId      Int
-  isActive     Boolean
+  brandId      Int?
+  isActive     Boolean        @default(true)
   powerId      Int?
   sizeId       Int?
   image        String
   orderProduct orderProduct[]
   professions  Profession[]
-  brand        Brand          @relation(fields: [brandId], references: [id])
+  brand        Brand?         @relation(fields: [brandId], references: [id])
   power        Power?         @relation(fields: [powerId], references: [id])
   size         Size?          @relation(fields: [sizeId], references: [id])
 }
@@ -163,20 +163,20 @@ model Order {
 }
 
 model orderProduct {
-  id           Int        @id @default(autoincrement())
+  id           Int         @id @default(autoincrement())
   isActive     String
   timeUnit     String
   workingTime  Int
   price        Float
   count        Int
-  toolId       Int
-  levelId      Int
+  toolId       Int?
+  levelId      Int?
   orderId      Int
-  professionId Int
-  order        Order      @relation(fields: [orderId], references: [id])
-  tool         Tools      @relation(fields: [toolId], references: [id])
-  level        Level      @relation(fields: [levelId], references: [id])
-  professions  Profession @relation(fields: [professionId], references: [id])
+  professionId Int?
+  order        Order       @relation(fields: [orderId], references: [id])
+  tool         Tools?      @relation(fields: [toolId], references: [id])
+  level        Level?      @relation(fields: [levelId], references: [id])
+  professions  Profession? @relation(fields: [professionId], references: [id])
 }
 
 model FAQ {

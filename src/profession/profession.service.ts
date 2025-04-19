@@ -27,7 +27,6 @@ export class ProfessionService {
         skip: (page - 1) * pageSize,
         take: pageSize,
         include: {
-          orderProduct: true,
           masterProfession: true,
           professionLevel: true,
           tools: true,
@@ -55,7 +54,6 @@ export class ProfessionService {
       const profession = await this.prisma.profession.findUnique({
         where: { id },
         include: {
-          orderProduct: true,
           masterProfession: true,
           professionLevel: true,
           tools: true,

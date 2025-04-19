@@ -32,6 +32,11 @@ export class UserController {
     return this.userService.login(LoginUserDto, request);
   }
 
+  @Post('/logout')
+  logout(@Req() request: Request){
+    return this.userService.logout(request)
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.updateUser(+id, updateUserDto);
@@ -40,6 +45,11 @@ export class UserController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.deleteUser(+id);
+  }
+
+  @Delete('session:id')
+  removeSession(@Param('id') id:string){
+    return this.userService.deleteSession(+id)
   }
 
   @UseGuards(AuthGuard)
@@ -61,7 +71,7 @@ export class UserController {
   @Roles(Role.ADMIN)
   @UseGuards(RolesGuard)
   @UseGuards(AuthGuard)
-  @Get("/users")
+  @Get("/getUsers")
     @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
     @ApiQuery({ name: 'pageSize', required: false, type: Number, example: 10 })
     @ApiQuery({ name: 'serachByPhone', required: false, type: String, example: "+998901234567" })

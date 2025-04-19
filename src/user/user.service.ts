@@ -95,33 +95,36 @@ export class UserService {
   }
 
   async login(LoginUserDto:LoginUserDto, request:Request) {
-    const userId = request['user'];
-    const ip = request.ip
+    // const userId = request['user'];
+    // const ip = request.ip
 
-    if (!userId) {
-      throw new UnauthorizedException('User ID not found in request. Please log in.');
-    }
+    // if (!userId) {
+    //   throw new UnauthorizedException('User ID not found in request. Please register.');
+    // }
     
     if (LoginUserDto.phone == this.ADMIN.phone && LoginUserDto.password == this.ADMIN.password) {
       let admin = await this.findUser(this.ADMIN.phone);
       if (admin) {
-        let session = await this.prisma.session.findMany({where:{userId:userId }})
-        if(!session){
-          await this.prisma.session.create({data:{userId:userId, ip:ip!}})
-        }
-        let loggedIp = session.filter((s)=>s.ip == ip)
+        // let session = await this.prisma.session.findMany({where:{userId:userId }})
+        // if(!session){
+        //   await this.prisma.session.create({data:{userId:userId, ip:ip!}})
+        // }
+        // let loggedIp = session.filter((s)=>s.ip == ip)
 
-        if(!loggedIp){
-          await this.prisma.session.create({data:{userId:userId, ip:ip!}})
-        }
+        // if(!loggedIp){
+        //   await this.prisma.session.create({data:{userId:userId, ip:ip!}})
+        // }
 
-        if(session.length > 3){
-          return {message:"You logged in from 3 devices:LIMIT"}
-        }
+        // if(session.length > 3){
+        //   return {message:"You logged in from 3 devices:LIMIT"}
+        // }
         let token = this.jwtService.sign({ id: admin.id, role: admin.role });
         return { token };
       }
-    
+      let region = await this.prisma.region.findUnique({where:{id:1}})
+      if(!region){
+        await this.prisma.region.create({data:{name:"Toshkent", }})
+      }
       let newAdmin = await this.prisma.user.create({ data: { ...this.ADMIN } }); 
       let token = this.jwtService.sign({ id: newAdmin.id, role: newAdmin.role });
         return { token };
@@ -133,19 +136,19 @@ export class UserService {
       return {message:"You must register first"}
     }
     
-    let session = await this.prisma.session.findMany({where:{userId:userId }})
-      if(!session){
-        await this.prisma.session.create({data:{userId:userId, ip:ip!}})
-      }
-      let loggedIp = session.filter((s)=>s.ip == ip)
+    // let session = await this.prisma.session.findMany({where:{userId:userId }})
+    //   if(!session){
+    //     await this.prisma.session.create({data:{userId:userId, ip:ip!}})
+    //   }
+    //   let loggedIp = session.filter((s)=>s.ip == ip)
 
-      if(!loggedIp){
-        await this.prisma.session.create({data:{userId:userId, ip:ip!}})
-      }
+    //   if(!loggedIp){
+    //     await this.prisma.session.create({data:{userId:userId, ip:ip!}})
+    //   }
 
-      if(session.length > 3){
-        return {message:"You logged in from 3 devices:LIMIT"}
-      }
+    //   if(session.length > 3){
+    //     return {message:"You logged in from 3 devices:LIMIT"}
+    //   }
 
     let token = this.jwtService.sign({id:user!.id, role:user!.role})
     if(user.password == LoginUserDto.password && user.phone == LoginUserDto.phone){
@@ -154,6 +157,28 @@ export class UserService {
     return `Wrong credentials`;
   }
 
+
+  async logout(request:Request){
+    let userId = request["user"]
+    if (!userId) {
+      throw new UnauthorizedException('User ID not found in request. Please log in.');
+    }
+
+    let user = await this.prisma.user.findUnique({where:{id:userId}})
+    if(user?.status == "pending"){
+      return "ustoz login qilmasdan logout qilib bolmaydi"
+    }
+    await this.prisma.user.update({
+      where: {
+        id: user!.id, 
+      },
+      data: {
+        status: 'pending', 
+      },
+    });
+    return {message:"logged out"}
+
+  }
 
   async updateUser(id: number, updateUserDto: UpdateUserDto) {
     let user = await this.prisma.user.findUnique({where:{id:id}})
@@ -178,12 +203,26 @@ export class UserService {
   if(user){
     throw new NotFoundException('User not found');
   }
+  await this.prisma.session.deleteMany({where:{userId:user!.id}})
+
   const removedUser = await this.prisma.user.delete({
     where: { id:user!.id },
   });
   return {removedUser}
   }
 
+
+  async deleteSession(id:number){
+    try {
+      let session = await this.prisma.session.findUnique({where:{id:id}})
+      if(!session){
+        throw new NotFoundException()
+      }
+      await this.prisma.session.delete({where:{id}})
+    } catch (error) {
+      throw  new Error(error.message)
+    }
+  }
 
   async getMe(request: Request) {
   const userId = request['user'];
@@ -200,8 +239,8 @@ export class UserService {
     throw new UnauthorizedException('User not found.');
   }
 
-  let {id, ...info} = user
-  return {info};
+  // let {id, ...info} = user
+  return {me:user};
   }
 
   async createAdmin(createAdminDto:CreateAdminDto){
