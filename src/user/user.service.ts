@@ -46,6 +46,7 @@ export class UserService {
   async register(createUserDto: CreateUserDto) {
 
     let roles = [Role.ADMIN, Role.SUPER_ADMIN, Role.VIEWER_ADMIN];
+
     if (roles.includes(createUserDto.role)) {
       throw new BadRequestException("You cannot register as admin");
     }
@@ -93,12 +94,30 @@ export class UserService {
     return {message:"Your account activated"};
   }
 
-  async login(LoginUserDto:LoginUserDto) {
+  async login(LoginUserDto:LoginUserDto, request:Request) {
+    const userId = request['user'];
+    const ip = request.ip
+
+    if (!userId) {
+      throw new UnauthorizedException('User ID not found in request. Please log in.');
+    }
     
     if (LoginUserDto.phone == this.ADMIN.phone && LoginUserDto.password == this.ADMIN.password) {
       let admin = await this.findUser(this.ADMIN.phone);
-    
       if (admin) {
+        let session = await this.prisma.session.findMany({where:{userId:userId }})
+        if(!session){
+          await this.prisma.session.create({data:{userId:userId, ip:ip!}})
+        }
+        let loggedIp = session.filter((s)=>s.ip == ip)
+
+        if(!loggedIp){
+          await this.prisma.session.create({data:{userId:userId, ip:ip!}})
+        }
+
+        if(session.length > 3){
+          return {message:"You logged in from 3 devices:LIMIT"}
+        }
         let token = this.jwtService.sign({ id: admin.id, role: admin.role });
         return { token };
       }
@@ -113,6 +132,21 @@ export class UserService {
     if(!user){
       return {message:"You must register first"}
     }
+    
+    let session = await this.prisma.session.findMany({where:{userId:userId }})
+      if(!session){
+        await this.prisma.session.create({data:{userId:userId, ip:ip!}})
+      }
+      let loggedIp = session.filter((s)=>s.ip == ip)
+
+      if(!loggedIp){
+        await this.prisma.session.create({data:{userId:userId, ip:ip!}})
+      }
+
+      if(session.length > 3){
+        return {message:"You logged in from 3 devices:LIMIT"}
+      }
+
     let token = this.jwtService.sign({id:user!.id, role:user!.role})
     if(user.password == LoginUserDto.password && user.phone == LoginUserDto.phone){
       return {token}
@@ -121,8 +155,8 @@ export class UserService {
   }
 
 
-  async updateUser(phone: string, updateUserDto: UpdateUserDto) {
-    let user = await this.findUser(phone)
+  async updateUser(id: number, updateUserDto: UpdateUserDto) {
+    let user = await this.prisma.user.findUnique({where:{id:id}})
     if(!user){
       throw new NotFoundException('User not found');
     }
@@ -139,8 +173,8 @@ export class UserService {
    }
 
 
-  async deleteUser(phone:string){
-  let user = await this.findUser(phone)
+  async deleteUser(id:number){
+  let user = await this.prisma.user.findUnique({where:{id:id}})
   if(user){
     throw new NotFoundException('User not found');
   }
@@ -178,4 +212,71 @@ export class UserService {
     let newAdmin = await this.prisma.user.create({ data: createAdminDto });
     return newAdmin
   }
+
+  async getUsers(
+    page: number = 1,
+    pageSize: number = 10,
+    phone?: string,
+    sort?: string
+  ) {
+    if (phone) {
+      const user = await this.prisma.user.findFirst({
+        where: { phone: phone },
+        include: {
+          region: true,
+          sessions: true,
+          orders: true,
+        },
+      });
+  
+      if (!user) {
+        throw new NotFoundException(`User with phone ${phone} not found`);
+      }
+  
+      return {
+        data: [user], 
+        meta: {
+          currentPage: 1,
+          totalPages: 1,
+          totalItems: 1,
+          pageSize: 1,
+        },
+      };
+    }
+  
+    let orderBy: { [key: string]: 'asc' | 'desc' } | undefined;
+
+if (sort === 'asc') {
+  orderBy = { id: 'asc' }; 
+} else if (sort === 'desc') {
+  orderBy = { id: 'desc' }; 
+} else {
+  throw new BadRequestException("Invalid sort parameter. Use 'asc' or 'desc'.");
+}
+
+  
+    const users = await this.prisma.user.findMany({
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      include: {
+        region: true,
+        sessions: true,
+        orders: true,
+      },
+      orderBy: orderBy,
+    });
+  
+    const totalCount = await this.prisma.user.count();
+  
+    return {
+      data: users,
+      meta: {
+        currentPage: page,
+        totalPages: Math.ceil(totalCount / pageSize),
+        totalItems: totalCount,
+        pageSize: pageSize,
+      },
+    };
+  }
+  
 }

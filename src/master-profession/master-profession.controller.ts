@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { MasterProfessionService } from './master-profession.service';
 import { CreateMasterProfessionDto } from './dto/create-master-profession.dto';
 import { UpdateMasterProfessionDto } from './dto/update-master-profession.dto';
+import { ApiQuery } from '@nestjs/swagger';
 
 @Controller('master-profession')
 export class MasterProfessionController {
@@ -13,8 +14,13 @@ export class MasterProfessionController {
   }
 
   @Get()
-  findAll() {
-    return this.masterProfessionService.findAll();
+    @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
+    @ApiQuery({ name: 'pageSize', required: false, type: Number, example: 10 })
+    findAll(
+      @Query('page') page: number = 1, 
+      @Query('pageSize') pageSize: number = 10, 
+    )  {
+    return this.masterProfessionService.findAll(+page, +pageSize);
   }
 
   @Get(':id')

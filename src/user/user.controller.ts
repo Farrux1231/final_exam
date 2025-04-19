@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -10,6 +10,7 @@ import { CreateAdminDto } from './dto/create-admin.dto';
 import { RolesGuard } from 'src/guards/role.guard';
 import { Roles } from 'src/decoration/user.decoration';
 import { Role } from 'Role/user.role';
+import { ApiQuery } from '@nestjs/swagger';
 
 @Controller('user')
 export class UserController {
@@ -26,18 +27,19 @@ export class UserController {
   }
 
   @Post("login")
-  login(@Body() LoginUserDto:LoginUserDto) {
-    return this.userService.login(LoginUserDto);
+  login(@Body() LoginUserDto:LoginUserDto,
+  @Req() request: Request) {
+    return this.userService.login(LoginUserDto, request);
   }
 
-  @Patch(':phone')
-  update(@Param('phone') phone: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.updateUser(phone, updateUserDto);
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.updateUser(+id, updateUserDto);
   }
 
-  @Delete(':phone')
-  remove(@Param('phone') phone: string) {
-    return this.userService.deleteUser(phone);
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.userService.deleteUser(+id);
   }
 
   @UseGuards(AuthGuard)
@@ -52,6 +54,25 @@ export class UserController {
   @Post("create/admin")
   async createAdmin(createAdminDto:CreateAdminDto){
     return this.userService.createAdmin(createAdminDto)
+  }
+
+  @Roles(Role.VIEWER_ADMIN)
+  @Roles(Role.SUPER_ADMIN)
+  @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
+  @Get("/users")
+    @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
+    @ApiQuery({ name: 'pageSize', required: false, type: Number, example: 10 })
+    @ApiQuery({ name: 'serachByPhone', required: false, type: String, example: "+998901234567" })
+    @ApiQuery({ name: 'sortBy_asc_or_desc', required: false, type: String, example: "asc" })
+    findAll(
+      @Query('page') page: number = 1, 
+      @Query('pageSize') pageSize: number = 10, 
+      @Query('serachByPhone') phone: string, 
+      @Query('sortBy_asc_or_desc') sort: string, 
+    ) {
+    this.userService.getUsers(+page, +pageSize, phone, sort)
   }
   
 }

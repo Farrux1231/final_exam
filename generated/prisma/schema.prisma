@@ -1,0 +1,202 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int       @id @default(autoincrement())
+  name     String
+  phone    String    @unique
+  password String
+  status   String    @default("pending")
+  role     String
+  regionId Int
+  stir     Int?
+  mfo      Int?
+  hr       Int?
+  bank     String?
+  oked     Int?
+  manzil   String?
+  region   Region    @relation(fields: [regionId], references: [id])
+  sessions Session[]
+  orders   Order[]
+}
+
+model Region {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  user User[]
+}
+
+model Session {
+  id     Int      @id @default(autoincrement())
+  ip     String
+  userId Int
+  date   DateTime @default(now())
+  user   User     @relation(fields: [userId], references: [id])
+}
+
+model Level {
+  id               Int                 @id @default(autoincrement())
+  name             String              @unique
+  product          orderProduct[]
+  professionLevel  professionLevel[]
+  masterProfession masterProfessions[]
+}
+
+model Comment {
+  id      Int    @id @default(autoincrement())
+  message String
+  star    Float
+}
+
+model Brand {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
+  tools Tools[]
+}
+
+model Power {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
+  tools Tools[]
+}
+
+model Size {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
+  tools Tools[]
+}
+
+model Master {
+  id                Int                 @id @default(autoincrement())
+  fullname          String
+  phone             String              @unique
+  isActive          Boolean             @default(false)
+  masterProfessions masterProfessions[]
+  image             String?
+  passportImage     String?
+  star              Float?
+  about             String
+}
+
+model masterProfessions {
+  id           Int        @id @default(autoincrement())
+  minWorking_h Int?
+  professionId Int
+  levelId      Int
+  price_h      Float?
+  price_d      Float?
+  experience   Int
+  masterId     Int
+  level        Level      @relation(fields: [levelId], references: [id])
+  profession   Profession @relation(fields: [professionId], references: [id])
+  master       Master     @relation(fields: [masterId], references: [id])
+}
+
+model professionLevel {
+  id           Int        @id @default(autoincrement())
+  professionId Int
+  levelId      Int
+  profession   Profession @relation(fields: [professionId], references: [id])
+  level        Level      @relation(fields: [levelId], references: [id])
+  minWorking_h Int
+  price_h      Int
+  price_d      Int
+}
+
+model Profession {
+  id               Int                 @id @default(autoincrement())
+  name             String
+  image            String
+  isActive         String
+  orderProduct     orderProduct[]
+  masterProfession masterProfessions[]
+  professionLevel  professionLevel[]
+  tools            Tools[]
+}
+
+model Tools {
+  id           Int            @id @default(autoincrement())
+  name         String
+  desc         String
+  price_h      Float
+  price_d      Float
+  quantity     Int
+  code         Int            @unique
+  brandId      Int
+  isActive     Boolean
+  powerId      Int?
+  sizeId       Int?
+  image        String
+  orderProduct orderProduct[]
+  professions  Profession[]
+  brand        Brand          @relation(fields: [brandId], references: [id])
+  power        Power?         @relation(fields: [powerId], references: [id])
+  size         Size?          @relation(fields: [sizeId], references: [id])
+}
+
+model Order {
+  id           Int            @id @default(autoincrement())
+  total        Float
+  location     String
+  address      String
+  date         DateTime       @default(now())
+  pay_type     String
+  withDelivery Boolean
+  status       String
+  instruction  String
+  userId       Int
+  orderProduct orderProduct[]
+  user         User           @relation(fields: [userId], references: [id])
+}
+
+model orderProduct {
+  id           Int        @id @default(autoincrement())
+  isActive     String
+  timeUnit     String
+  workingTime  Int
+  price        Float
+  count        Int
+  toolId       Int
+  levelId      Int
+  orderId      Int
+  professionId Int
+  order        Order      @relation(fields: [orderId], references: [id])
+  tool         Tools      @relation(fields: [toolId], references: [id])
+  level        Level      @relation(fields: [levelId], references: [id])
+  professions  Profession @relation(fields: [professionId], references: [id])
+}
+
+model FAQ {
+  id        Int    @id @default(autoincrement())
+  answer    String
+  quiteions String
+}
+
+model Contact {
+  id      Int    @id @default(autoincrement())
+  name    String
+  surname String
+  phone   String
+  address String
+  message String
+}
+
+model generalInfo {
+  id    Int    @id @default(autoincrement())
+  link  String
+  email String
+  phone String
+}

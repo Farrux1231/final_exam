@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -15,9 +16,9 @@ datasource db {
 
 
 model User {
-  id               Int       @default(autoincrement()) @id
+  id               Int        @default(autoincrement()) @id
   name             String
-  phone            String
+  phone            String     @unique
   password         String
   status           String     @default("pending")
   role             String
@@ -50,8 +51,8 @@ model Session {
 model Level {
   id               Int         @default(autoincrement()) @id
   name             String      @unique
-  product          orderProduct []
-  professionLevel  professionLevel []
+  product          orderProduct     []
+  professionLevel  professionLevel  []
   masterProfession masterProfessions[]
 }
 
@@ -107,8 +108,10 @@ model masterProfessions {
 
 model professionLevel {
   id               Int         @default(autoincrement()) @id
-  profession       Profession[]
-  level            Level[]
+  professionId     Int
+  levelId          Int
+  profession       Profession  @relation(fields: [professionId], references: [id])
+  level            Level       @relation(fields: [levelId], references: [id])
   minWorking_h     Int
   price_h          Int
   price_d          Int
@@ -118,42 +121,32 @@ model Profession {
   id               Int         @default(autoincrement()) @id
   name             String
   image            String
-  isActive         String
-  professionToolId Int
-  professionLevelId Int
-  orderProductId   Int
-  orderProduct    orderProduct @relation(fields: [orderProductId], references: [id])
-  professionTool   professionTool @relation(fields: [professionToolId], references: [id])
+  isActive         String     
+  orderProduct     orderProduct     []
   masterProfession masterProfessions[]
-  professionLevel  professionLevel @relation(fields: [professionLevelId], references: [id])
+  professionLevel  professionLevel  []
+  tools            Tools            []
 }
 
-model professionTool {
-  id               Int         @default(autoincrement()) @id
-  professsion      Profession[]
-  tool             Tools[]
-}
 
 model Tools {
-  id               Int         @default(autoincrement()) @id
+  id               Int          @default(autoincrement()) @id
   name             String
   desc             String
   price_h          Float
   price_d          Float
   quantity         Int
-  code             Int        @unique
+  code             Int           @unique
   brandId          Int
-  isActive         String 
-  capacityId       Int
-  sizeId           Int
+  isActive         Boolean 
+  powerId          Int?
+  sizeId           Int?
   image            String
-  productId        Int  
-  professionToolId Int
-  professionTool   professionTool @relation(fields: [professionToolId], references: [id])
-  product          orderProduct   @relation(fields: [productId], references: [id])
+  orderProduct     orderProduct   []
+  professions      Profession     []
   brand            Brand          @relation(fields: [brandId], references: [id])
-  capacity         Power          @relation(fields: [capacityId], references: [id])
-  size             Size           @relation(fields: [sizeId], references: [id])
+  power            Power ?        @relation(fields: [powerId], references: [id])
+  size             Size  ?        @relation(fields: [sizeId], references: [id])
 }
 
 model Order {
@@ -178,11 +171,14 @@ model orderProduct {
   workingTime      Int
   price            Float
   count            Int
+  toolId           Int
+  levelId          Int
   orderId          Int
-  order            Order @relation(fields: [orderId], references: [id])
-  tools            Tools[]
-  level            Level[] 
-  professions      Profession[]
+  professionId     Int
+  order            Order          @relation(fields: [orderId], references: [id])
+  tool             Tools          @relation(fields: [toolId], references: [id])
+  level            Level          @relation(fields: [levelId], references: [id]) 
+  professions      Profession     @relation(fields: [professionId], references: [id])
 }
 
 model FAQ {

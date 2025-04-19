@@ -14,9 +14,12 @@ import { BrandModule } from './brand/brand.module';
 import { PowerModule } from './power/power.module';
 import { MasterModule } from './master/master.module';
 import { MasterProfessionModule } from './master-profession/master-profession.module';
+import { ProfessionLevelModule } from './profession-level/profession-level.module';
+import { ProfessionModule } from './profession/profession.module';
+import { ToolsModule } from './tools/tools.module';
 
 @Module({
-  imports: [GeneralInfoModule, ContactModule, FaqModule, PrismaModule, UserModule, RegionModule, LevelModule, CommentModule, SizeModule, BrandModule, PowerModule, MasterModule, MasterProfessionModule],
+  imports: [GeneralInfoModule, ContactModule, FaqModule, PrismaModule, UserModule, RegionModule, LevelModule, CommentModule, SizeModule, BrandModule, PowerModule, MasterModule, MasterProfessionModule, ProfessionLevelModule, ProfessionModule, ToolsModule],
   controllers: [AppController],
   providers: [AppService],
 })
