@@ -250,6 +250,17 @@ exports.Prisma.OrderProductScalarFieldEnum = {
   professionId: 'professionId'
 };
 
+exports.Prisma.BasketScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  professionId: 'professionId',
+  toolsId: 'toolsId',
+  levelId: 'levelId',
+  totalPrice: 'totalPrice',
+  timeUnit: 'timeUnit',
+  workTime: 'workTime'
+};
+
 exports.Prisma.FAQScalarFieldEnum = {
   id: 'id',
   answer: 'answer',
@@ -304,6 +315,7 @@ exports.Prisma.ModelName = {
   Tools: 'Tools',
   Order: 'Order',
   orderProduct: 'orderProduct',
+  Basket: 'Basket',
   FAQ: 'FAQ',
   Contact: 'Contact',
   generalInfo: 'generalInfo'

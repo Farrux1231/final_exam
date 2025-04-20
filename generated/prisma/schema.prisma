@@ -53,6 +53,7 @@ model Level {
   product          orderProduct[]
   professionLevel  professionLevel[]
   masterProfession masterProfessions[]
+  basket           Basket[]
 }
 
 model Comment {
@@ -89,6 +90,7 @@ model Master {
   passportImage     String?
   star              Float?
   about             String
+  orders            Order[]
 }
 
 model masterProfessions {
@@ -125,6 +127,7 @@ model Profession {
   masterProfession masterProfessions[]
   professionLevel  professionLevel[]
   tools            Tools[]
+  basket           Basket[]
 }
 
 model Tools {
@@ -142,6 +145,7 @@ model Tools {
   image        String
   orderProduct orderProduct[]
   professions  Profession[]
+  basket       Basket[]
   brand        Brand?         @relation(fields: [brandId], references: [id])
   power        Power?         @relation(fields: [powerId], references: [id])
   size         Size?          @relation(fields: [sizeId], references: [id])
@@ -158,6 +162,7 @@ model Order {
   status       String
   instruction  String
   userId       Int
+  maters       Master[]
   orderProduct orderProduct[]
   user         User           @relation(fields: [userId], references: [id])
 }
@@ -177,6 +182,20 @@ model orderProduct {
   tool         Tools?      @relation(fields: [toolId], references: [id])
   level        Level?      @relation(fields: [levelId], references: [id])
   professions  Profession? @relation(fields: [professionId], references: [id])
+}
+
+model Basket {
+  id           Int        @id @default(autoincrement())
+  userId       Int
+  professionId Int
+  toolsId      Int
+  levelId      Int
+  profession   Profession @relation(fields: [professionId], references: [id])
+  tools        Tools      @relation(fields: [toolsId], references: [id])
+  levels       Level      @relation(fields: [levelId], references: [id])
+  totalPrice   Int
+  timeUnit     String
+  workTime     Int
 }
 
 model FAQ {

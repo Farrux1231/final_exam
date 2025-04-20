@@ -32,19 +32,38 @@ export class MasterService {
   } 
 
 
-  async findAll(page: number = 1, pageSize: number = 10) {
+  async findAll(page: number = 1, pageSize: number = 10, level?: string) {
     const skip = (page - 1) * pageSize;
     const take = pageSize;
+
+    const filter = level
+      ? {
+          masterProfessions: {
+            some: {
+              level: {
+                name: level,
+              },
+            },
+          },
+        }
+      : {};
 
     const masters = await this.prisma.master.findMany({
       skip,
       take,
+      where: filter,
       include: {
-        masterProfessions: true, 
+        masterProfessions: {
+          include: {
+            level: true, 
+          },
+        },
       },
     });
 
-    const totalCount = await this.prisma.master.count();
+    const totalCount = await this.prisma.master.count({
+      where: filter,
+    });
 
     return {
       data: masters,
@@ -53,7 +72,8 @@ export class MasterService {
       pageSize,
       totalPages: Math.ceil(totalCount / pageSize),
     };
-  }
+}
+
 
   async findOne(id: number) {
     return await this.prisma.master.findUnique({
@@ -65,13 +85,35 @@ export class MasterService {
   }
 
   async update(id: number, updateMasterDto: UpdateMasterDto) {
-    return await this.prisma.master.update({
-      where: { id },
-      data: {
-        ...updateMasterDto,
-      },
+    const { masterProfessions, ...masterData } = updateMasterDto;
+  
+    return await this.prisma.$transaction(async (prisma) => {
+      const updatedMaster = await prisma.master.update({
+        where: { id },
+        data: masterData,
+      });
+  
+      if (masterProfessions && masterProfessions.length > 0) {
+        await prisma.masterProfessions.deleteMany({
+          where: { masterId: id },
+        });
+  
+        await Promise.all(
+          masterProfessions.map((profession) =>
+            prisma.masterProfessions.create({
+              data: {
+                ...profession,
+                masterId: id,
+              },
+            })
+          )
+        );
+      }
+  
+      return updatedMaster;
     });
   }
+  
 
   async remove(id: number) {
     try {
@@ -79,6 +121,8 @@ export class MasterService {
       if(!master){
         throw Error("Not found")
       }
+
+      await this.prisma.masterProfessions.deleteMany({where:{masterId:id}})
 
       await this.prisma.master.delete({
         where: { id },

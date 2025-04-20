@@ -13,17 +13,19 @@ export class MasterController {
     return this.masterService.create(createMasterDto);
   }
 
-  @Get()
+  @Get('getAllmaster')
     @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
     @ApiQuery({ name: 'pageSize', required: false, type: Number, example: 10 })
+    @ApiQuery({ name: 'filter By Level', required: false, type: String, example: "pro" })
     findAll(
       @Query('page') page: number = 1, 
       @Query('pageSize') pageSize: number = 10, 
+      @Query('filter By Level') level: string, 
     ) {
-    return this.masterService.findAll(page, pageSize);
+    return this.masterService.findAll(page, pageSize, level);
   }
 
-  @Get()
+  @Get('findByphone')
     @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
     @ApiQuery({ name: 'pageSize', required: false, type: Number, example: 10 })
     findByPhone(

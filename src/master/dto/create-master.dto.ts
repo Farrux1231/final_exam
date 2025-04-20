@@ -61,10 +61,6 @@ export class CreateMasterProfessionDto {
   @IsInt()
   experience: number;
 
-  @ApiProperty({
-    description: 'Master ID',
-    example: 1,
-  })
   @IsInt()
   masterId: number;
 }

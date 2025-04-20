@@ -1,21 +1,24 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsString, IsNumber, IsOptional, IsBoolean, IsUrl, IsPhoneNumber } from 'class-validator';
+import { CreateMasterDto, CreateMasterProfessionDto } from './create-master.dto';
+import { PartialType } from '@nestjs/mapped-types';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-export class UpdateMasterDto {
+export class UpdateMasterDto extends PartialType(CreateMasterDto) {
   @ApiPropertyOptional({
     description: "Masterning to'liq ismi",
     example: 'John Doe',
   })
   @IsOptional()
   @IsString()
-  fullname?: string; 
+  fullname?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Telefon raqam (unikal)',
     example: '+998901234567',
   })
+  @IsOptional()
   @IsPhoneNumber()
-  phone: string; 
+  phone?: string;
 
   @ApiPropertyOptional({
     description: "Masterning aktiv yoki noaktiv holati",
@@ -23,7 +26,7 @@ export class UpdateMasterDto {
   })
   @IsOptional()
   @IsBoolean()
-  isActive?: boolean; 
+  isActive?: boolean;
 
   @ApiPropertyOptional({
     description: "Masterning rasmi URL",
@@ -31,7 +34,7 @@ export class UpdateMasterDto {
   })
   @IsOptional()
   @IsUrl()
-  image?: string; 
+  image?: string;
 
   @ApiPropertyOptional({
     description: "Masterning pasport rasmi URL",
@@ -39,7 +42,7 @@ export class UpdateMasterDto {
   })
   @IsOptional()
   @IsUrl()
-  passportImage?: string; 
+  passportImage?: string;
 
   @ApiPropertyOptional({
     description: 'Masterning reytingi (Float, ixtiyoriy)',
@@ -47,7 +50,7 @@ export class UpdateMasterDto {
   })
   @IsOptional()
   @IsNumber()
-  star?: number; 
+  star?: number;
 
   @ApiPropertyOptional({
     description: "Master haqida qisqacha ma'lumot",
@@ -55,5 +58,12 @@ export class UpdateMasterDto {
   })
   @IsOptional()
   @IsString()
-  about?: string; 
+  about?: string;
+
+  @ApiPropertyOptional({
+    type: [CreateMasterProfessionDto], 
+    description: 'List of master professions',
+  })
+  @IsOptional()
+  masterProfessions?: CreateMasterProfessionDto[];
 }
