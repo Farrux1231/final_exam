@@ -13,9 +13,10 @@ import { orderEnum } from 'enum/order-enum';
 import { Pay_type } from 'enum/payment_type-enum';
 
 class CreateOrderProductDto {
-  @IsString()
-  isActive: string;
 
+  @IsString()
+  isActive:string
+  
   @ApiProperty({ description: 'Time unit for the order product',enum:orderEnum, example: orderEnum.HOUR })
   @IsEnum(orderEnum, { message: 'Wrong timeUnit' })
   timeUnit: orderEnum;

@@ -88,6 +88,7 @@ export class RegionService {
 
   async findOne(id: number, request:Request) {
     const userId = request['user'];
+    
       if (!userId) {
         throw new UnauthorizedException('User ID not found in request. Please log in.');
       }

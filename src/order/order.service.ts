@@ -1,56 +1,73 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Request } from 'express';
 
 @Injectable()
 export class OrderService {
-  constructor(private readonly prisma:PrismaService){}
+  constructor(private readonly prisma: PrismaService) {}
 
-  async create(createOrderDto: CreateOrderDto) {
-    try {
-      if(createOrderDto.orderProducts.length == 0){
-        throw new BadRequestException("Maxsulotlarni tanlang")
-      }
-
-      const {orderProducts, ...order} = createOrderDto
-      console.log(order);
-      console.log(orderProducts);
-      
-
-      let masters:Array<object> = [];
-      let preofId = createOrderDto.orderProducts.filter((r_p) => r_p.professionId != 0);
-      // console.log(preofId);
-
-      for (let i = 0; i < preofId.length; i++) {
-        let profession = await this.prisma.profession.findUnique({
-          where: { id: preofId[i].professionId },
-        });
-        masters.push(profession as object);
-}
-
-// console.log(masters); 
-
-      
-      return "asdfv"
-    } catch (error) {
-      throw new Error(error.message)
+  async create(createOrderDto: CreateOrderDto, request: Request) {
+    let userId = request['user'];
+    if (!userId) {
+      throw new UnauthorizedException();
     }
+    if (createOrderDto.orderProducts.length == 0) {
+      throw new BadRequestException('Maxsulotlarni tanlang');
+    }
+    const { orderProducts, ...order } = createOrderDto;
+    console.log(orderProducts);
+
+    let newOrder = await this.prisma.order.create({
+      data: { ...order, userId: userId, status: 'pending' },
+    });
+    for (let i = 0; i < orderProducts.length; i++) {
+      await this.prisma.orderProduct.create({
+        data: { orderId: newOrder.id, ...orderProducts[i], isActive: 'pending' },
+      });
+    }
+
+    return { message: 'created order' };
   }
 
-  findAll() {
-    return `This action returns all order`;
+  async findAll() {
+    let orders = await this.prisma.order.findMany({include:{
+      orderProduct:true
+    }})
+    return {orders};
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} order`;
+  async findOne(id: number) {
+    let order = await this.prisma.order.findUnique({where:{id}})
+    return order;
   }
 
-  update(id: number, updateOrderDto: UpdateOrderDto) {
-    return `This action updates a #${id} order`;
+  async update(id: number, updateOrderDto: UpdateOrderDto) {
+    const existingOrder = await this.prisma.order.findUnique({ where: { id } });
+    if (!existingOrder) {
+      throw new NotFoundException(`Order with ID ${id} not found`);
+    }
+
+    const updatedOrder = await this.prisma.order.update({
+      where: { id },
+      data: {
+        ...updateOrderDto,
+        status: 'active', 
+      },
+    });
+
+    return { message: 'Order updated successfully', updatedOrder };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} order`;
+  async remove(id: number) {
+    const existingOrder = await this.prisma.order.findUnique({ where: { id } });
+    if (!existingOrder) {
+      throw new NotFoundException(`Order with ID ${id} not found`);
+    }
+
+    await this.prisma.order.delete({ where: { id } });
+    return { message: 'Order removed successfully' };
   }
 }
+

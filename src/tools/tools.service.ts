@@ -70,6 +70,7 @@ export class ToolsService {
         where: { id },
         data: { ...updateToolDto }
       });
+      await this.prisma.basket.deleteMany()
       return {updatedTool};
     } catch (error) {
       throw new NotFoundException(`Error updating tool: ${error.message}`);
@@ -81,6 +82,7 @@ export class ToolsService {
       const deletedTool = await this.prisma.tools.delete({
         where: { id },
       });
+      await this.prisma.basket.deleteMany()
       return {deletedTool, message:"Deleted"};
     } catch (error) {
       throw new NotFoundException(`Error deleting tool: ${error.message}`);

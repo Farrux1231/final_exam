@@ -1,25 +1,25 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards } from '@nestjs/common';
 import { BasketService } from './basket.service';
 import { CreateBasketDto } from './dto/create-basket.dto';
 import { UpdateBasketDto } from './dto/update-basket.dto';
+import { Request } from 'express';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('basket')
 export class BasketController {
   constructor(private readonly basketService: BasketService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
-  create(@Body() createBasketDto: CreateBasketDto) {
-    return this.basketService.create(createBasketDto);
+  create(@Body() createBasketDto: CreateBasketDto, 
+        @Req() request: Request) {
+    return this.basketService.create(createBasketDto, request);
   }
 
-  @Get()
-  findAll() {
-    return this.basketService.findAll();
-  }
-
+  @UseGuards(AuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.basketService.findOne(+id);
+  findOne(@Req() request: Request) {
+    return this.basketService.findOne(request);
   }
 
   @Patch(':id')

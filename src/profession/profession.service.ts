@@ -76,7 +76,7 @@ export class ProfessionService {
         where: { id },
         data: { ...updateProfessionDto },
       });
-
+      await this.prisma.basket.deleteMany()
       return updatedProfession;
     } catch (error) {
       throw new NotFoundException(`Error updating profession: ${error.message}`);
