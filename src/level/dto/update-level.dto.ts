@@ -1,9 +1,15 @@
+import { IsOptional, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateLevelDto } from './create-level.dto';
-import { IsOptional, IsString } from 'class-validator';
 
 export class UpdateLevelDto extends PartialType(CreateLevelDto) {
+  @ApiProperty({
+    example: 'Beginner',
+    description: 'Level name',
+    required: false, 
+  })
   @IsOptional()
   @IsString()
-  name?: string; 
+  name?: string;
 }

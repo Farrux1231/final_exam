@@ -1,26 +1,70 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateGeneralInfoDto } from './dto/create-general_info.dto';
 import { UpdateGeneralInfoDto } from './dto/update-general_info.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+
 
 @Injectable()
 export class GeneralInfoService {
-  create(createGeneralInfoDto: CreateGeneralInfoDto) {
-    return 'This action adds a new generalInfo';
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(createGeneralInfoDto: CreateGeneralInfoDto) {
+    const { link, email, phone } = createGeneralInfoDto;
+    return this.prisma.generalInfo.create({
+      data: {
+        link,
+        email,
+        phone,
+      },
+    });
   }
 
-  findAll() {
-    return `This action returns all generalInfo`;
+  async findAll() {
+    return this.prisma.generalInfo.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} generalInfo`;
+  async findOne(id: number) {
+    const generalInfo = await this.prisma.generalInfo.findUnique({
+      where: { id },
+    });
+    if (!generalInfo) {
+      throw new NotFoundException(`General info with ID ${id} not found`);
+    }
+    return generalInfo;
   }
 
-  update(id: number, updateGeneralInfoDto: UpdateGeneralInfoDto) {
-    return `This action updates a #${id} generalInfo`;
+  async update(id: number, updateGeneralInfoDto: UpdateGeneralInfoDto) {
+    const { link, email, phone } = updateGeneralInfoDto;
+    const existingGeneralInfo = await this.prisma.generalInfo.findUnique({
+      where: { id },
+    });
+
+    if (!existingGeneralInfo) {
+      throw new NotFoundException(`General info with ID ${id} not found`);
+    }
+
+    return this.prisma.generalInfo.update({
+      where: { id },
+      data: {
+        link,
+        email,
+        phone,
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} generalInfo`;
+  async remove(id: number) {
+    const generalInfo = await this.prisma.generalInfo.findUnique({
+      where: { id },
+    });
+
+    if (!generalInfo) {
+      throw new NotFoundException(`General info with ID ${id} not found`);
+    }
+
+    return this.prisma.generalInfo.delete({
+      where: { id },
+    });
   }
 }
+

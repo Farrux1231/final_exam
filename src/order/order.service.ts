@@ -19,6 +19,19 @@ export class OrderService {
     const { orderProducts, ...order } = createOrderDto;
     console.log(orderProducts);
 
+    let tool = await this.prisma.tools.findUnique({where:{id:orderProducts[0].toolId}})
+    if(!tool){
+      throw new NotFoundException("Not fount Tool")
+    }
+    let Level = await this.prisma.level.findUnique({where:{id:orderProducts[0].levelId}})
+    if(!Level){
+      throw new NotFoundException("Not fount level")
+    }
+    let profession = await this.prisma.profession.findUnique({where:{id:orderProducts[0].professionId}})
+    if(!profession){
+      throw new NotFoundException("Not fount profession")
+    }
+    
     let newOrder = await this.prisma.order.create({
       data: { ...order, userId: userId, status: 'pending' },
     });

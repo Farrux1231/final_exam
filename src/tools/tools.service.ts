@@ -9,14 +9,25 @@ export class ToolsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createToolDto: CreateToolDto) {
-    try {      
+
+    let brand = await this.prisma.brand.findUnique({where:{id:createToolDto.brandId}})
+    if(!brand){
+      throw new NotFoundException("Not fount brand")
+    }
+    let power = await this.prisma.power.findUnique({where:{id:createToolDto.powerId}})
+    if(!power){
+      throw new NotFoundException("Not fount power")
+    }
+    let size = await this.prisma.power.findUnique({where:{id:createToolDto.sizeId}})
+    if(!size){
+      throw new NotFoundException("Not fount size")
+    }
+
       const tool = await this.prisma.tools.create({
         data: createToolDto 
       });
       return {tool};
-    } catch (error) {
-      throw new BadRequestException(`Error creating tool: ${error.message}`);
-    }
+
   }
 
   async findAll(page: number = 1, pageSize: number = 10) {

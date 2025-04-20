@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMasterDto } from './dto/create-master.dto';
 import { UpdateMasterDto } from './dto/update-master.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -10,7 +10,14 @@ export class MasterService {
 
   async create(createMasterDto: CreateMasterDto) {
     const { masterProfessions, ...masterData } = createMasterDto;
-
+    let profession = await this.prisma.profession.findUnique({where:{id:masterProfessions[0].professionId}})
+    if(!profession){
+      throw new NotFoundException("Not fount Profession")
+    }
+    let level = await this.prisma.level.findUnique({where:{id:masterProfessions[0].levelId}})
+    if(!level){
+      throw new NotFoundException("Not fount level")
+    }
     const createdMaster = await this.prisma.master.create({
       data: {
         ...masterData,

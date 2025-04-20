@@ -60,6 +60,7 @@ model Comment {
   id               Int         @default(autoincrement()) @id
   message          String
   star             Float 
+  master           Master[]
 }
 
 model Brand {
@@ -91,6 +92,7 @@ model Master {
   star             Float?
   about            String
   orders           Order[]
+  comment          Comment[]
 }
 
 model masterProfessions {
