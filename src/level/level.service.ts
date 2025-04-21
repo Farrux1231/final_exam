@@ -10,7 +10,6 @@ export class LevelService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createLevelDto: CreateLevelDto) {
-    try {
       let oldLevel = await this.prisma.level.findUnique({where:{name:createLevelDto.name}})
       if(oldLevel){
         throw new BadRequestException("ALready created")
@@ -21,9 +20,7 @@ export class LevelService {
         },
       });
       return {level };
-    } catch (error) {
-      throw new Error(`Failed to create level: ${error.message}`);
-    }
+
   }
 
   async findAll(page: number = 1, pageSize: number = 10) {

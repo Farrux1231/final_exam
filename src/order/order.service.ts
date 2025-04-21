@@ -12,34 +12,46 @@ export class OrderService {
   ) {}
 
   async create(createOrderDto: CreateOrderDto, request: Request) {
-    let userId = request['user'];
-    if (!userId) {
+    let ownerId = request['user'];
+    console.log(ownerId, "userId");
+    
+    if (!ownerId) {
       throw new UnauthorizedException();
     }
     if (createOrderDto.orderProducts.length == 0) {
       throw new BadRequestException('Maxsulotlarni tanlang');
     }
     const { orderProducts, ...order } = createOrderDto;
-    console.log(orderProducts);
+    // console.log(orderProducts);
 
     let tool = await this.prisma.tools.findUnique({where:{id:orderProducts[0].toolId}})
-    if(!tool){
-      throw new NotFoundException("Not fount Tool")
+    if(tool){
+      if(!tool){
+        throw new NotFoundException("Not fount Tool")
+      }
     }
     let Level = await this.prisma.level.findUnique({where:{id:orderProducts[0].levelId}})
-    if(!Level){
-      throw new NotFoundException("Not fount level")
+    if(Level){
+      if(!Level){
+        throw new NotFoundException("Not fount level")
+      }
     }
     let profession = await this.prisma.profession.findUnique({where:{id:orderProducts[0].professionId}})
-    if(!profession){
-      throw new NotFoundException("Not fount profession")
+    if(profession){
+      if(!profession){
+        throw new NotFoundException("Not fount profession")
+      }
     }
+    // if(orderProducts[0].count > tool.count){
+    //   throw BadRequestException("tool yetarli emas")
+    // }
     
     let newOrder = await this.prisma.order.create({
-      data: { ...order, userId: userId, status: 'pending' },
+      data: { ...order, userId: ownerId.id, status: 'pending' },
     });
-    const userId1 = createOrderDto.userId; 
-
+    const userId1 = newOrder.userId;
+    // console.log(userId1);
+    
     await this.tgBotService.sendOrderDetailsToUser(userId1, newOrder.id);
 
     for (let i = 0; i < orderProducts.length; i++) {

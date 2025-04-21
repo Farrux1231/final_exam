@@ -13,7 +13,7 @@ async function bootstrap() {
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
-  await app.listen(process.env.PORT ?? 7000), console.log('server running at 4000 port');
+  await app.listen(process.env.PORT ?? 7000), console.log('server running at 7000 port');
   ;
 }
 bootstrap();
