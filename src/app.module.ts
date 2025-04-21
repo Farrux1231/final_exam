@@ -18,9 +18,10 @@ import { ProfessionModule } from './profession/profession.module';
 import { ToolsModule } from './tools/tools.module';
 import { OrderModule } from './order/order.module';
 import { BasketModule } from './basket/basket.module';
+import { TgBotModule } from './tg_bot/tg_bot.module';
 
 @Module({
-  imports: [GeneralInfoModule, ContactModule, FaqModule, PrismaModule, UserModule, RegionModule, LevelModule, CommentModule, SizeModule, BrandModule, PowerModule, MasterModule, ProfessionLevelModule, ProfessionModule, ToolsModule, OrderModule, BasketModule],
+  imports: [GeneralInfoModule, ContactModule, FaqModule, PrismaModule, UserModule, RegionModule, LevelModule, CommentModule, SizeModule, BrandModule, PowerModule, MasterModule, ProfessionLevelModule, ProfessionModule, ToolsModule, OrderModule, BasketModule, TgBotModule],
   controllers: [AppController],
   providers: [AppService],
 })

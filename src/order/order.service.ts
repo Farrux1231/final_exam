@@ -3,10 +3,13 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Request } from 'express';
+import { TgBotService } from 'src/tg_bot/tg_bot.service';
 
 @Injectable()
 export class OrderService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService,
+    private tgBotService:TgBotService
+  ) {}
 
   async create(createOrderDto: CreateOrderDto, request: Request) {
     let userId = request['user'];
@@ -35,6 +38,10 @@ export class OrderService {
     let newOrder = await this.prisma.order.create({
       data: { ...order, userId: userId, status: 'pending' },
     });
+    const userId1 = createOrderDto.userId; 
+
+    await this.tgBotService.sendOrderDetailsToUser(userId1, newOrder.id);
+
     for (let i = 0; i < orderProducts.length; i++) {
       await this.prisma.orderProduct.create({
         data: { orderId: newOrder.id, ...orderProducts[i], isActive: 'pending' },
