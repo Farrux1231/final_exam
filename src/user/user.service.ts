@@ -95,12 +95,12 @@ export class UserService {
   }
 
   async login(LoginUserDto:LoginUserDto, request:Request) {
-    // const userId = request['user'];
-    // const ip = request.ip
+    const userId = request['user'];
+    const ip = request.ip
 
-    // if (!userId) {
-    //   throw new UnauthorizedException('User ID not found in request. Please register.');
-    // }
+    if (!userId) {
+      throw new UnauthorizedException('User ID not found in request. Please register.');
+    }
     
     if (LoginUserDto.phone == this.ADMIN.phone && LoginUserDto.password == this.ADMIN.password) {
       let admin = await this.findUser(this.ADMIN.phone);
