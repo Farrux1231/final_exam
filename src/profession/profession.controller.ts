@@ -36,8 +36,7 @@ export class ProfessionController {
     return this.professionService.findOne(+id);
   }
 
-  @Roles(Role.SUPER_ADMIN)
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN,Role.SUPER_ADMIN)
   @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProfessionDto: UpdateProfessionDto) {

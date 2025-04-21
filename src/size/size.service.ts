@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateSizeDto } from './dto/create-size.dto';
 import { UpdateSizeDto } from './dto/update-size.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -9,6 +9,10 @@ export class SizeService {
 
   async create(createSizeDto: CreateSizeDto) {
     try {
+      let oldsize = await this.prisma.size.findUnique({where:{name:createSizeDto.name}})
+      if(oldsize){
+        throw new BadRequestException("ALready created")
+      }
       const size = await this.prisma.size.create({
         data: {
           ...createSizeDto,

@@ -6,12 +6,14 @@ import { ApiQuery } from '@nestjs/swagger';
 import { Roles } from 'src/decoration/user.decoration';
 import { Role } from 'Role/user.role';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { RolesGuard } from 'src/guards/role.guard';
 
 @Controller('level')
 export class LevelController {
   constructor(private readonly levelService: LevelService) {}
 
   @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   @UseGuards(AuthGuard)
   @Post()
   create(@Body() createLevelDto: CreateLevelDto) {
@@ -38,8 +40,8 @@ export class LevelController {
     return this.levelService.findByName(name);
   }
 
-  @Roles(Role.SUPER_ADMIN)
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.SUPER_ADMIN)
+  @UseGuards(RolesGuard)
   @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateLevelDto: UpdateLevelDto) {
@@ -47,6 +49,7 @@ export class LevelController {
   }
 
   @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {

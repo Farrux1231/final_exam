@@ -5,6 +5,7 @@ import { UpdateCommentDto } from './dto/update-comment.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { Roles } from 'src/decoration/user.decoration';
 import { Role } from 'Role/user.role';
+import { RolesGuard } from 'src/guards/role.guard';
 
 @Controller('comment')
 export class CommentController {
@@ -17,6 +18,7 @@ export class CommentController {
   }
 
   @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   @UseGuards(AuthGuard)
   @Get()
   findAll() {

@@ -11,19 +11,19 @@ export class ToolsService {
   async create(createToolDto: CreateToolDto) {
 
     let brand = await this.prisma.brand.findUnique({where:{id:createToolDto.brandId}})
-    if(brand){
+    if(createToolDto.brandId){
       if(!brand){
         throw new NotFoundException("Not fount brand")
       }
     }
     let power = await this.prisma.power.findUnique({where:{id:createToolDto.powerId}})
-    if(power){
+    if(createToolDto.powerId){
       if(!power){
         throw new NotFoundException("Not fount power")
       }
     }
     let size = await this.prisma.power.findUnique({where:{id:createToolDto.sizeId}})
-    if(size){
+    if(createToolDto.sizeId){
       if(!size){
         throw new NotFoundException("Not fount size")
       }

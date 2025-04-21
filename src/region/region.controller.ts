@@ -49,8 +49,7 @@ export class RegionController {
     return this.regionService.findByName(name, request);
   }
 
-  @Roles(Role.SUPER_ADMIN)
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.SUPER_ADMIN)
   @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateRegionDto: UpdateRegionDto) {

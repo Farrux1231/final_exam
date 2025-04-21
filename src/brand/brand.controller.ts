@@ -16,12 +16,14 @@ import { ApiQuery } from '@nestjs/swagger';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { Roles } from 'src/decoration/user.decoration';
 import { Role } from 'Role/user.role';
+import { RolesGuard } from 'src/guards/role.guard';
 
 @Controller('brand')
 export class BrandController {
   constructor(private readonly brandService: BrandService) {}
 
   @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   @UseGuards(AuthGuard)
   @Post()
   create(@Body() createBrandDto: CreateBrandDto) {
@@ -51,8 +53,8 @@ export class BrandController {
     return this.brandService.findByName(name);
   }
 
-  @Roles(Role.SUPER_ADMIN)
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.SUPER_ADMIN)
+  @UseGuards(RolesGuard)
   @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateBrandDto: UpdateBrandDto) {
@@ -60,6 +62,7 @@ export class BrandController {
   }
 
   @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {

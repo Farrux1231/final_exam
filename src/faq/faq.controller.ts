@@ -16,8 +16,7 @@ export class FaqController {
     return this.faqService.create(createFaqDto);
   }
 
-  @Roles(Role.SUPER_ADMIN)
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.SUPER_ADMIN)
   @UseGuards(AuthGuard)
   @Get()
   findAll() {
@@ -30,8 +29,7 @@ export class FaqController {
     return this.faqService.findOne(+id);
   }
 
-  @Roles(Role.SUPER_ADMIN)
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.SUPER_ADMIN)
   @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateFaqDto: UpdateFaqDto) {

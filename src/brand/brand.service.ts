@@ -11,6 +11,10 @@ export class BrandService {
 
   async create(createBrandDto: CreateBrandDto) {
     try {
+      let oldbrand = await this.prisma.brand.findUnique({where:{name:createBrandDto.name}})
+      if(oldbrand){
+        throw new BadRequestException("ALready created")
+      }
       const brand = await this.prisma.brand.create({
         data: { ...createBrandDto },
       });

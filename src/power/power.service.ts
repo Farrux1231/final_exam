@@ -10,6 +10,10 @@ export class PowerService {
 
   async create(createPowerDto: CreatePowerDto) {
     try {
+      let oldpower = await this.prisma.power.findUnique({where:{name:createPowerDto.name}})
+      if(oldpower){
+        throw new BadRequestException("ALready created")
+      }
       const power = await this.prisma.power.create({
         data: { ...createPowerDto },
       });

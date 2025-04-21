@@ -20,6 +20,7 @@ export class UserService {
     password: string;
     role: string;
     regionId: number;
+    status:string
   };
 
   constructor(
@@ -32,6 +33,7 @@ export class UserService {
       password: "+998101001234",
       role: "admin",
       regionId: 1,
+      status:"active"
     };
   }
 
@@ -95,12 +97,12 @@ export class UserService {
   }
 
   async login(LoginUserDto:LoginUserDto, request:Request) {
-    const userId = request['user'];
-    const ip = request.ip
+    // const userId = request['user'];
+    // const ip = request.ip
 
-    if (!userId) {
-      throw new UnauthorizedException('User ID not found in request. Please register.');
-    }
+    // if (!userId) {
+    //   throw new UnauthorizedException('User ID not found in request. Please register.');
+    // }
     
     if (LoginUserDto.phone == this.ADMIN.phone && LoginUserDto.password == this.ADMIN.password) {
       let admin = await this.findUser(this.ADMIN.phone);
@@ -260,45 +262,9 @@ export class UserService {
   async getUsers(
     page: number = 1,
     pageSize: number = 10,
-    phone?: string,
-    sort?: string
+  
   ) {
-    if (phone) {
-      const user = await this.prisma.user.findFirst({
-        where: { phone: phone },
-        include: {
-          region: true,
-          sessions: true,
-          orders: true,
-        },
-      });
-  
-      if (!user) {
-        throw new NotFoundException(`User with phone ${phone} not found`);
-      }
-  
-      return {
-        data: [user], 
-        meta: {
-          currentPage: 1,
-          totalPages: 1,
-          totalItems: 1,
-          pageSize: 1,
-        },
-      };
-    }
-  
-    let orderBy: { [key: string]: 'asc' | 'desc' } | undefined;
 
-if (sort === 'asc') {
-  orderBy = { id: 'asc' }; 
-} else if (sort === 'desc') {
-  orderBy = { id: 'desc' }; 
-} else {
-  throw new BadRequestException("Invalid sort parameter. Use 'asc' or 'desc'.");
-}
-
-  
     const users = await this.prisma.user.findMany({
       skip: (page - 1) * pageSize,
       take: pageSize,
@@ -307,7 +273,6 @@ if (sort === 'asc') {
         sessions: true,
         orders: true,
       },
-      orderBy: orderBy,
     });
   
     const totalCount = await this.prisma.user.count();

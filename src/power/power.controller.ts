@@ -43,8 +43,7 @@ export class PowerController {
     return this.powerService.findByName(name);
   }
 
-  @Roles(Role.SUPER_ADMIN)
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN,Role.SUPER_ADMIN)
   @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePowerDto: UpdatePowerDto) {

@@ -50,8 +50,7 @@ export class UserController {
     return this.userService.updateUser(+id, updateUserDto);
   }
 
-  @Roles(Role.SUPER_ADMIN)
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.SUPER_ADMIN)
   @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
@@ -79,23 +78,17 @@ export class UserController {
     return this.userService.createAdmin(createAdminDto)
   }
 
-  @Roles(Role.VIEWER_ADMIN)
-  @Roles(Role.SUPER_ADMIN)
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.SUPER_ADMIN, Role.VIEWER_ADMIN)
   @UseGuards(RolesGuard)
   @UseGuards(AuthGuard)
   @Get("/getUsers")
     @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
     @ApiQuery({ name: 'pageSize', required: false, type: Number, example: 10 })
-    @ApiQuery({ name: 'serachByPhone', required: false, type: String, example: "+998901234567" })
-    @ApiQuery({ name: 'sortBy_asc_or_desc', required: false, type: String, example: "asc" })
     findAll(
       @Query('page') page: number = 1, 
       @Query('pageSize') pageSize: number = 10, 
-      @Query('serachByPhone') phone: string, 
-      @Query('sortBy_asc_or_desc') sort: string, 
     ) {
-    this.userService.getUsers(+page, +pageSize, phone, sort)
+    this.userService.getUsers(+page, +pageSize)
   }
   
 }

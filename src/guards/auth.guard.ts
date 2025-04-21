@@ -1,34 +1,35 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
-import { Request } from 'express';
+import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Request } from 'express';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private jwt: JwtService) {}
+  constructor(private jwtService: JwtService) {}
 
   canActivate(context: ExecutionContext): boolean {
     const request: Request = context.switchToHttp().getRequest();
-    const token = request.headers.authorization?.split(' ')[1];
+    const authHeader = request.headers.authorization;
 
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      throw new UnauthorizedException('Invalid token!');
+    }
+
+    const token = authHeader.split(' ')[1];
+    
     if (!token) {
-      throw new UnauthorizedException('You must log in to perform this operation.');
+      throw new UnauthorizedException('No token provided!');
     }
 
     try {
-      const data = this.jwt.verify(token); 
-
-      if (!data) {
-        throw new BadRequestException('Invalid token provided.');
-      }
-
-      request['user'] = data.id;
-      return true;
-    } catch (error) {
-      if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
-        throw new UnauthorizedException('Token is invalid or expired.');
-      }
-
-      throw new BadRequestException(error.message || 'An unknown error occurred.');
+      
+      const payload = this.jwtService.verify(token, {
+        secret: "secret",
+      });
+      
+      request['user'] = payload;
+    } catch {
+      throw new UnauthorizedException('Invalid token!');
     }
+    return true;
   }
 }

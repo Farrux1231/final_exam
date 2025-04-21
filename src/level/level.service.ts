@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateLevelDto } from './dto/create-level.dto';
 import { UpdateLevelDto } from './dto/update-level.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -11,6 +11,10 @@ export class LevelService {
 
   async create(createLevelDto: CreateLevelDto) {
     try {
+      let oldLevel = await this.prisma.level.findUnique({where:{name:createLevelDto.name}})
+      if(oldLevel){
+        throw new BadRequestException("ALready created")
+      }
       const level = await this.prisma.level.create({
         data: {
           name: createLevelDto.name,

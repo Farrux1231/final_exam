@@ -6,21 +6,22 @@ import { ApiQuery } from '@nestjs/swagger';
 import { Roles } from 'src/decoration/user.decoration';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { Role } from 'Role/user.role';
+import { RolesGuard } from 'src/guards/role.guard';
 
 @Controller('master')
 export class MasterController {
   constructor(private readonly masterService: MasterService) {}
 
   @Roles(Role.ADMIN)
+  @UseGuards(RolesGuard)
   @UseGuards(AuthGuard)
   @Post()
   create(@Body() createMasterDto: CreateMasterDto) {
     return this.masterService.create(createMasterDto);
   }
 
-  @Roles(Role.VIEWER_ADMIN)
-  @Roles(Role.SUPER_ADMIN)
-  @Roles(Role.ADMIN)
+
+  @Roles(Role.ADMIN, Role.SUPER_ADMIN, Role.VIEWER_ADMIN)
   @UseGuards(AuthGuard)
   @Get('getAllmaster')
     @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
@@ -34,9 +35,7 @@ export class MasterController {
     return this.masterService.findAll(page, pageSize, level);
   }
 
-  @Roles(Role.VIEWER_ADMIN)
-  @Roles(Role.SUPER_ADMIN)
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.SUPER_ADMIN, Role.VIEWER_ADMIN)
   @UseGuards(AuthGuard)
   @Get('findByphone')
     @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
@@ -49,17 +48,15 @@ export class MasterController {
     return this.masterService.findByPhone(phone, +page, +pageSize);
   }
 
-  @Roles(Role.VIEWER_ADMIN)
-  @Roles(Role.SUPER_ADMIN)
-  @Roles(Role.ADMIN)
+
+  @Roles(Role.ADMIN, Role.SUPER_ADMIN, Role.VIEWER_ADMIN)
   @UseGuards(AuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.masterService.findOne(+id);
   }
 
-  @Roles(Role.SUPER_ADMIN)
-  @Roles(Role.ADMIN)
+  @Roles(Role.ADMIN, Role.SUPER_ADMIN)
   @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateMasterDto: UpdateMasterDto) {
