@@ -1,0 +1,8 @@
+admin login qiladi 
+login : +998101001234
+parol : +998101001234
+
+db da bolsa token beradi, bolmasa uzi register qilib saqlab token beradi 
+
+sever: http://13.232.45.220:7000/api
+
