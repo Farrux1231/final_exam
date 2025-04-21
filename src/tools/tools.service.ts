@@ -107,7 +107,7 @@ export class ToolsService {
         where: { id },
       });
       await this.prisma.basket.deleteMany()
-      return {deletedTool, message:"Deleted"};
+      return deletedTool;
     } catch (error) {
       throw new NotFoundException(`Error deleting tool: ${error.message}`);
     }

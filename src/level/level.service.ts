@@ -16,7 +16,7 @@ export class LevelService {
           name: createLevelDto.name,
         },
       });
-      return { message: 'Level created successfully', level };
+      return {level };
     } catch (error) {
       throw new Error(`Failed to create level: ${error.message}`);
     }
@@ -55,7 +55,6 @@ export class LevelService {
   }
 
   async findOne(id: number) {
-    try {
       const level = await this.prisma.level.findUnique({
         where: { id },
         include: {
@@ -72,9 +71,7 @@ export class LevelService {
       }
 
       return level;
-    } catch (error) {
-      throw new Error(`Failed to fetch level: ${error.message}`);
-    }
+
   }
 
   async findByName(name:string){
@@ -98,7 +95,7 @@ export class LevelService {
           name: updateLevelDto.name,
         },
       });
-      return { message: 'Level updated successfully', level };
+      return { level };
     } catch (error) {
       throw new Error(`Failed to update level: ${error.message}`);
     }

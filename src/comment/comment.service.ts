@@ -62,7 +62,7 @@ export class CommentService {
       throw new NotFoundException(`Comment with ID ${id} not found`);
     }
 
-    await this.prisma.master_rating.deleteMany({
+    let deletedMaster = await this.prisma.master_rating.deleteMany({
       where: { commentId: id },
     });
 
@@ -70,7 +70,7 @@ export class CommentService {
       where: { id },
     });
 
-    return { message: `Comment with ID ${id} and its master ratings were successfully deleted` };
+    return {deletedMaster};
   }
 }
 
