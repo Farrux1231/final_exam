@@ -158,6 +158,11 @@ export class UserService {
   }
 
 
+  async allSession (request:Request){
+    let user = request['user']
+    let session = await this.prisma.session.findMany({where:{userId:user}})
+    return {session}
+  }
   async logout(request:Request){
     let userId = request["user"]
     if (!userId) {

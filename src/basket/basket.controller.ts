@@ -4,10 +4,13 @@ import { CreateBasketDto } from './dto/create-basket.dto';
 import { UpdateBasketDto } from './dto/update-basket.dto';
 import { Request } from 'express';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { Roles } from 'src/decoration/user.decoration';
+import { Role } from 'Role/user.role';
 
 @Controller('basket')
 export class BasketController {
   constructor(private readonly basketService: BasketService) {}
+
 
   @UseGuards(AuthGuard)
   @Post()
@@ -16,17 +19,25 @@ export class BasketController {
     return this.basketService.create(createBasketDto, request);
   }
 
+  @Roles(Role.USER_YUR)
+  @Roles(Role.USER_FIZ)
   @UseGuards(AuthGuard)
   @Get(':id')
   findOne(@Req() request: Request) {
     return this.basketService.findOne(request);
   }
 
+  @Roles(Role.USER_YUR)
+  @Roles(Role.USER_FIZ)
+  @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateBasketDto: UpdateBasketDto) {
     return this.basketService.update(+id, updateBasketDto);
   }
 
+  @Roles(Role.USER_YUR)
+  @Roles(Role.USER_FIZ)
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.basketService.remove(+id);

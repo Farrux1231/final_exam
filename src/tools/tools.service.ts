@@ -23,8 +23,15 @@ export class ToolsService {
       throw new NotFoundException("Not fount size")
     }
 
+    let lastTool = await this.prisma.tools.findFirst({
+      orderBy: {
+        id: 'desc', 
+      },
+    });
+    
+      const newCode = (lastTool?.code ?? 0) + 1;
       const tool = await this.prisma.tools.create({
-        data: createToolDto 
+        data: {...createToolDto, code:newCode} 
       });
       return {tool};
 

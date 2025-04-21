@@ -32,26 +32,39 @@ export class UserController {
     return this.userService.login(LoginUserDto, request);
   }
 
+  @UseGuards(AuthGuard)
+  @Get('allSessions')
+  getSessions(@Req() request: Request){
+    return this.userService.allSession(request)
+  }
+
+  @UseGuards(AuthGuard)
   @Post('/logout')
   logout(@Req() request: Request){
     return this.userService.logout(request)
   }
 
+  @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.updateUser(+id, updateUserDto);
   }
 
+  @Roles(Role.SUPER_ADMIN)
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.deleteUser(+id);
   }
 
+  @UseGuards(AuthGuard)
   @Delete('session:id')
   removeSession(@Param('id') id:string){
     return this.userService.deleteSession(+id)
   }
 
+  
   @UseGuards(AuthGuard)
   @Get('me')
   async getMe(@Req() request: Request) {

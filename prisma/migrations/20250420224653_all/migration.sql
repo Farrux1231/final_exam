@@ -47,9 +47,19 @@ CREATE TABLE "Level" (
 CREATE TABLE "Comment" (
     "id" SERIAL NOT NULL,
     "message" TEXT NOT NULL,
-    "star" DOUBLE PRECISION NOT NULL,
+    "orderId" INTEGER NOT NULL,
 
     CONSTRAINT "Comment_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Master_rating" (
+    "id" SERIAL NOT NULL,
+    "commentId" INTEGER NOT NULL,
+    "star" DOUBLE PRECISION NOT NULL,
+    "masterId" INTEGER NOT NULL,
+
+    CONSTRAINT "Master_rating_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -272,6 +282,15 @@ ALTER TABLE "User" ADD CONSTRAINT "User_regionId_fkey" FOREIGN KEY ("regionId") 
 
 -- AddForeignKey
 ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Comment" ADD CONSTRAINT "Comment_orderId_fkey" FOREIGN KEY ("orderId") REFERENCES "Order"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Master_rating" ADD CONSTRAINT "Master_rating_commentId_fkey" FOREIGN KEY ("commentId") REFERENCES "Comment"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Master_rating" ADD CONSTRAINT "Master_rating_masterId_fkey" FOREIGN KEY ("masterId") REFERENCES "Master"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "masterProfessions" ADD CONSTRAINT "masterProfessions_levelId_fkey" FOREIGN KEY ("levelId") REFERENCES "Level"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

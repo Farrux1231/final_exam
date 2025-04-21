@@ -33,11 +33,6 @@ export class UpdateToolDto extends PartialType(CreateToolDto) {
   @Min(0, { message: 'Quantity must be a non-negative integer' })
   quantity?: number;
 
-  @ApiPropertyOptional({ description: 'Unique code for the tool', example: 1001 })
-  @IsOptional()
-  @IsInt()
-  code?: number;
-
   @ApiPropertyOptional({ description: 'ID of the brand associated with the tool', example: 1 })
   @IsOptional()
   @IsInt()

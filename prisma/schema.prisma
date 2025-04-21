@@ -59,8 +59,18 @@ model Level {
 model Comment {
   id               Int         @default(autoincrement()) @id
   message          String
-  star             Float 
-  master           Master[]
+  orderId          Int
+  master_rating    Master_rating[]
+  order            Order       @relation(fields: [orderId], references: [id]) 
+}
+
+model Master_rating {
+  id               Int          @default(autoincrement())  @id
+  commentId        Int
+  star             Float
+  masterId         Int
+  comment          Comment       @relation(fields: [commentId], references: [id])
+  master           Master       @relation(fields: [masterId], references: [id])
 }
 
 model Brand {
@@ -92,7 +102,7 @@ model Master {
   star             Float?
   about            String
   orders           Order[]
-  comment          Comment[]
+  master_rating    Master_rating[]
 }
 
 model masterProfessions {
@@ -166,6 +176,7 @@ model Order {
   instruction      String
   userId           Int
   maters           Master[]
+  comment          Comment[]
   orderProduct     orderProduct[]
   user             User            @relation(fields: [userId], references: [id])         
 }

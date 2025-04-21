@@ -5,11 +5,15 @@ import { UpdateRegionDto } from './dto/update-region.dto';
 import { ApiQuery } from '@nestjs/swagger';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { Request } from 'express';
+import { Roles } from 'src/decoration/user.decoration';
+import { Role } from 'Role/user.role';
 
 @Controller('region')
 export class RegionController {
   constructor(private readonly regionService: RegionService) {}
 
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard)
   @Post()
   create(@Body() createRegionDto: CreateRegionDto) {
     return this.regionService.create(createRegionDto);
@@ -37,17 +41,24 @@ export class RegionController {
     return this.regionService.findOne(+id, request);
   }
 
+
+  @UseGuards(AuthGuard)
   @Get('/name')
   search(@Param('name') name: string,
   @Req() request: Request) {
     return this.regionService.findByName(name, request);
   }
 
+  @Roles(Role.SUPER_ADMIN)
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateRegionDto: UpdateRegionDto) {
     return this.regionService.update(+id, updateRegionDto);
   }
 
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.regionService.remove(+id);
